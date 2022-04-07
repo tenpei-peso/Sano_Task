@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 
-
 class Member extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -47,22 +46,18 @@ class Member extends Model
     ];
     
     public function getIdUser(){
-        $user = DB::table('member')->where('id', 1)->get();
+        $user = DB::table('members')->where('id', 1)->get();
         return $user;
     }
 
     public function getAreaUser(){
-        $user = DB::table('member')->where('area', '東京')->get();
+        $user = DB::table('members')->where('area', '東京')->get();
         return $user;
     }
 
     public function getAgeUser(){
-        $user = DB::table('member')->where('age', '<=', 30)->get();
+        $user = DB::table('members')->where('age', '<=', 30)->get();
         return $user;
     }
 
-
-
-
 }
-1
