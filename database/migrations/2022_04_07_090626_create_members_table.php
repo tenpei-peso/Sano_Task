@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('member', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('名前');
             $table->integer('age')->comment('年齢');
             $table->string('area')->comment('エリア');
             $table->boolean('leader')->default(false)->comment('リーダー');
-            $table->string('comment')->nullable(true)->comment('コメンt');
+            $table->string('comment')->nullable(true)->comment('コメント');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('members');
     }
 };

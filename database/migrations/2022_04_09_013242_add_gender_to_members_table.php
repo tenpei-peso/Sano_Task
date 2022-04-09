@@ -13,7 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::rename('member','members');
+        Schema::table('members', function (Blueprint $table) {
+            $table->string('gender')->nullable(true)->comment('性別');
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::rename('member','members');
+        Schema::table('members', function (Blueprint $table) {
+            //
+        });
     }
 };

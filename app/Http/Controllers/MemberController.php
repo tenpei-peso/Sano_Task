@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\PostRequest;
 
 
 
@@ -36,5 +37,38 @@ class MemberController extends Controller
 
         Log::info($sortMembers);
         return 'test';
+    }
+
+    public function show($id)
+    {
+        $allMember = Member::all();
+
+        $getUsers = Member::find($id); //chap7 step1 URLから該当するユーザー取得
+
+        $errorUser = $allMember->where('area', $id)->isEmpty();
+
+        if($errorUser) {        //chap7 step2
+            return "ユーザーはいません";
+        } else {
+            return $allMember->where('area', $id);
+        }
+
+        return $getUsers;
+    }
+
+    public function index() {   //chap7 step2 ユーザー全部表示
+        $allMember = Member::all();
+        return $allMember;
+    }
+
+    public function searchMembers(Request $request) {
+        $minAgeData = $request->input('minAge'); 
+        $maxAgeData = $request->input('maxAge'); //chap7 step4
+
+        $allMember = Member::all();  //chap7 step5
+        $ageUser = $allMember->where('age', '>=', $minAgeData); 
+        
+        $ageUsers = $allMember->whereBetween('age', [$minAgeData, $maxAgeData]); // chap7 step6
+        return $ageUsers;
     }
 }
