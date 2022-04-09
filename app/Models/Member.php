@@ -24,6 +24,7 @@ class Member extends Model
         'area',
         'leader',
         'comment',
+        'gender'
     ];
 
     /**

@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Member;
+use Illuminate\Support\Arr;
 
 
 class MembersTableSeeder extends Seeder
@@ -16,24 +18,23 @@ class MembersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('members')->insert([
-            [
-                'id' => 1,
-                'name' => 'demo1',
-                'age' => 22,
-                'area' => '大阪',
-                'leader' => true,
-                'comment' => 'こんにちわ',
-                
-            ],
-            [
-                'id' => 2,
-                'name' => 'demo2',
-                'age' => 33,
-                'area' => '東京',
-                'leader' => false,
-                'comment' => '',
-            ],
-        ]);
+        $area = array('東京','大阪','福岡','北海道');
+        $leader = array(true, false);
+        $comment = array('こんにちは','こんばんわ');
+        $gender = array('男性','女性','その他');
+
+
+        for($i = 0; $i<100; $i++){
+
+            DB::table('members')->insert(
+                [
+                    'name' => "$i . さん",
+                    'age' => $i,
+                    'area' => Arr::random($area),
+                    'leader' => Arr::random($leader),
+                    'comment' => Arr::random($comment),
+                    'gender' => Arr::random($gender),
+                ]);
+        }
     }
 }
