@@ -11,64 +11,83 @@ use App\Http\Requests\PostRequest;
 
 class MemberController extends Controller
 {
-    public function showMemberList(Member $member) {
-        $allMember = Member::all();  //chap6 step1
-        $tokyoUser = $allMember->firstWhere('area','東京'); //chap6 step2
-        $ageTwentyFive = $allMember->where('age', '>=', 25); //chap6 step3
+    public function showMemberList(Member $member, $area = null) {
+        $fetchIdUser = $member->getIdUser(); //04 step3
+        $fetchAreaUser = $member->getAreaUser(); //04 step4
+        $fetchAgeUser = $member->getAgeUser(); //04 step5
 
-        $ageHasData = $allMember->where('age', '<=', 20)->isNotEmpty(); //chap6 step4
+
+        $allMember = $member::all();  //05 step1
+        $tokyoUser = $allMember->firstWhere('area','東京'); //05 step2
+        $ageTwentyFive = $allMember->where('age', '>=', 25); //05 step3
+
+        $ageHasData = $allMember->where('age', '<=', 20)->isNotEmpty(); //05 step4
 
         if($ageHasData) {
-            Log::info("２０歳以下がいます");
+            // Log::info("２０歳以下がいます");
         } else {
-            Log::info("いません");
+            // Log::info("いません");
         }
 
-        $memberCount = $allMember->count();  //chap6 step5
+        $memberCount = $allMember->count();  //05 step5
 
-        $tokyoMembers = $allMember->map(function($items) {  //chap6 step6
-            return $items->firstWhere('area','東京');
-            
+        $tokyoMembers = $allMember->map(function($item) {  //05 step6
+            if ($item['area'] == '東京') {
+                return $item;
+            }
         });
 
-        $areaData = $allMember->pluck('area');  //chap6 step7
+        $areaData = $allMember->pluck('area');  //05 step7
 
-        $sortMembers = $allMember->sortByDesc('age');  //chap6 step8
+        $sortMembers = $allMember->sortByDesc('age');  //05 step8
 
-        Log::info($sortMembers);
+        // Log::info($sortMembers);
+
+        //<------  07 step2 ---------->
+        $emptyData = Member::where('area', $area)->get()->isNotEmpty();
+
+        if (empty($area)) {     
+            $memberUser = Member::all();
+            Log::info(json_encode($memberUser, JSON_UNESCAPED_UNICODE));
+        } elseif ($emptyData) {
+            $memberUser = Member::where('area', $area)->get();
+            Log::info(json_encode($memberUser, JSON_UNESCAPED_UNICODE));
+        } elseif (!$emptyData) {
+            Log::info('該当するユーザーはいません');
+        }
+
         return 'test';
     }
 
     public function show($id)
     {
-        $allMember = Member::all();
 
-        $getUsers = Member::find($id); //chap7 step1 URLから該当するユーザー取得
-
-        $errorUser = $allMember->where('area', $id)->isEmpty();
-
-        if($errorUser) {        //chap7 step2
-            return "ユーザーはいません";
-        } else {
-            return $allMember->where('area', $id);
-        }
+        $getUsers = Member::find($id); //07 step1 URLから該当するユーザー取得
 
         return $getUsers;
     }
 
-    public function index() {   //chap7 step2 ユーザー全部表示
+    public function index() {   //07 step2 ユーザー全部表示
         $allMember = Member::all();
         return $allMember;
     }
 
     public function searchMembers(Request $request) {
         $minAgeData = $request->input('minAge'); 
-        $maxAgeData = $request->input('maxAge'); //chap7 step4
+        $maxAgeData = $request->input('maxAge'); //07 step4
 
-        $allMember = Member::all();  //chap7 step5
-        $ageUser = $allMember->where('age', '>=', $minAgeData); 
         
-        $ageUsers = $allMember->whereBetween('age', [$minAgeData, $maxAgeData]); // chap7 step6
-        return $ageUsers;
-    }
+        $selectUser = Member::where('age', '>=', $minAgeData)->get();// 07 step5
+
+        //<-------07 step6 ------>
+
+        if (!empty($minAgeData) && !empty($maxAgeData)) {
+            $ageUser = Member::whereBetween('age', [$minAgeData, $maxAgeData])->get();
+        } elseif(empty($maxAgeData)) {
+            $ageUser = Member::where('age', '>=', $minAgeData)->get();
+        } elseif(empty($minAgeData) && empty($maxAgeData)) {
+            $ageUser = Member::all();
+        }
+        return $ageUser;
+}
 }

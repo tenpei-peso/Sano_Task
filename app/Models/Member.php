@@ -61,4 +61,9 @@ class Member extends Model
         return $user;
     }
 
+    public function allUser() {
+        $user = DB::table('members')->get();
+        return $user;
+    }
+
 }
