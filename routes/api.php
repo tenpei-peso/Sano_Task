@@ -12,4 +12,12 @@ Route::get('/member_detail', [MemberController::class, 'index']); //chap7
 
 Route::post('/search_members', [MemberController::class, 'searchMembers']);
 
-Route::get('/table_list', [TeamController::class, 'showTeams']); //chap7
+//テスト
+
+Route::get('/team_list', [TeamController::class, 'showTeams']); 
+
+Route::get('/team_list/{query}', [TeamController::class, 'selectedShowTeams']); //chap7
+
+Route::post('/search_teams', [MemberController::class, 'searchTeams']);
+
+Route::post('/select_charge_teams', [MemberController::class, 'searchChargeTeams']);

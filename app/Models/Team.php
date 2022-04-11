@@ -50,4 +50,44 @@ class Member extends Model
         $teams = $this->all();
         return $teams;
     }
+
+    public function getGenreTeams($query){
+        $genre = $this->where('genre', $query)->get();
+        return $genre;
+    }
+
+    public function searchTeams(){
+        return 'test';
+    }
+
+    public function searchChargeTeam($request){
+        $minAgeData = $request->input('minAge'); 
+        $maxAgeData = $request->input('maxAge');
+        $genreData = $request->input('genre');
+
+        if($minAgeData == 100 && $maxAgeData == 1500) {
+            $feeUser = $this->whereBetween('fee', [$minAgeData, $maxAgeData])->get();
+            return $feeUser;
+        }
+
+        if($minAgeData == 100) {
+            $feeUser = $this->where('fee', '>=', $minAgeData)->get();
+            return $feeUser;
+        }
+
+        if($maxAgeData == 100) {
+            $feeUser = $this->where('fee', '<=', $maxAgeData)->get();
+            return $feeUser;
+        }
+
+        if (!isset($minAgeData) && !isset($maxAgeData)) {
+            $feedUser = $this->all();
+            return $feedUser;
+        }
+
+        if (isset($minAgeData) && isset($maxAgeData) && isset($genreData)) {
+            $selectedUser = $this->where('fee', '>=', $minAgeData)->where('fee', '<=', $maxAgeData)->where('genre', $genreData)->get();
+            return $selectedUser;
+        }
+    }
 }
