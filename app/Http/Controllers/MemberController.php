@@ -43,7 +43,7 @@ class MemberController extends Controller
 
         // Log::info($sortMembers);
 
-        //<------  07 step2 ---------->
+        //<------  07 step3 ---------->
         $emptyData = Member::where('area', $area)->get()->isNotEmpty();
 
         if (empty($area)) {     
