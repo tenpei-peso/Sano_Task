@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('名前');
-            $table->string('explain')->comment('年齢');
-            $table->string('genre')->comment('エリア');
-            $table->integer('fee')->default(false)->comment('リーダー');
-            $table->integer('rank')->default(1)->comment('コメント');
+            $table->string('explain')->comment('説明');
+            $table->string('genre')->comment('分類');
+            $table->integer('fee')->comment('料金');
+            $table->integer('rank')->default(1)->comment('ランク');
         });
     }
 

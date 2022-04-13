@@ -18,17 +18,17 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
-        $fee = array(500,1000,2000,5000);
-        $rank = array(1, 2, 3, 4);
-        $genre = array("サッカー", "野球", "バンド", "ラグビー",);
+        $fee = [500,1000,2000,5000];
+        $rank = [1, 2, 3, 4];
+        $genre = ["サッカー", "野球", "バンド", "ラグビー",];
 
         for($i = 0; $i<20; $i++){
 
-            DB::table('members')->insert(
+            DB::table('teams')->insert(
                 [
                     'name' => "name. $i",
                     'explain' => "説明. $i",
-                    'genre' => Arr::random($rank),
+                    'genre' => Arr::random($genre),
                     'fee' => Arr::random($fee),
                     'rank' => Arr::random($rank),
                     

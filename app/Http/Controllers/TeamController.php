@@ -10,24 +10,37 @@ use Illuminate\Support\Facades\Log;
 class TeamController extends Controller
 {
     public function showTeams (Team $team) {
+        //<-------02 step1---------->
         $getTeams = $team->getAllTeams();
-        Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
+        // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
 
         return 'test';
     }
 
-    public function selectedShowTeams(Team $team, $query )
+    //<-------02 step3---------->
+    public function selectedShowTeams(Team $team, $genre )
     {
-        $team->getGenreTeams($query);
+        $genreTeams = $team->getGenreTeams($genre);
+        Log::info(json_encode($genreTeams, JSON_UNESCAPED_UNICODE));
+        return 'test';
     }
 
+    //<-------02 step4---------->
     public function searchTeams(Team $team)
     {
         $team->searchTeams();
+        return 'test';
     }
 
-    public function searchChargeTeam(Team $team, Request $request)
+    //<-------02 step5---------->
+    public function searchFeeTeams(Team $team, Request $request)
     {
-        $team->searchChargeTeams($request);
+        $minAgeData = $request->input('minAge'); 
+        $maxAgeData = $request->input('maxAge');
+        $genreData = $request->input('genre');
+
+
+        $searchFeeData = $team->searchFeeTeams($minAgeData, $maxAgeData, $genreData);
+        return $searchFeeData;
     }
 }

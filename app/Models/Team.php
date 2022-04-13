@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 
-class Member extends Model
+class Team extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -45,37 +45,35 @@ class Member extends Model
         'email_verified_at' => 'datetime',
     ];
 
-
+    //<-------02 step1---------->
     public function getAllTeams(){
         $teams = $this->all();
         return $teams;
     }
-
-    public function getGenreTeams($query){
-        $genre = $this->where('genre', $query)->get();
-        return $genre;
+    //<-------02 step3---------->
+    public function getGenreTeams($genre){
+        $genreTeams = $this->where('genre', $genre)->get();
+        return $genreTeams;
     }
-
+    //<-------02 step4---------->
     public function searchTeams(){
         return 'test';
     }
 
-    public function searchChargeTeam($request){
-        $minAgeData = $request->input('minAge'); 
-        $maxAgeData = $request->input('maxAge');
-        $genreData = $request->input('genre');
+    //<-------02 step5---------->
+    public function searchFeeTeams($minAgeData = null, $maxAgeData = null, $genreData){
 
-        if($minAgeData == 100 && $maxAgeData == 1500) {
+        if(isset($minAgeData) && isset($maxAgeData)) {
             $feeUser = $this->whereBetween('fee', [$minAgeData, $maxAgeData])->get();
             return $feeUser;
         }
 
-        if($minAgeData == 100) {
+        if(isset($minAgeData) && !isset($maxAgeData)) {
             $feeUser = $this->where('fee', '>=', $minAgeData)->get();
             return $feeUser;
         }
 
-        if($maxAgeData == 100) {
+        if(!isset($minAgeData) && isset($maxAgeData)) {
             $feeUser = $this->where('fee', '<=', $maxAgeData)->get();
             return $feeUser;
         }
@@ -86,7 +84,7 @@ class Member extends Model
         }
 
         if (isset($minAgeData) && isset($maxAgeData) && isset($genreData)) {
-            $selectedUser = $this->where('fee', '>=', $minAgeData)->where('fee', '<=', $maxAgeData)->where('genre', $genreData)->get();
+            $selectedUser = $this->where([['fee', '>=', $minAgeData], ['fee', '<=', $maxAgeData], ['genre', '=', $genreData]])->get();
             return $selectedUser;
         }
     }

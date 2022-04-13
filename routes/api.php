@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +17,8 @@ Route::post('/search_members', [MemberController::class, 'searchMembers']);
 
 Route::get('/team_list', [TeamController::class, 'showTeams']); 
 
-Route::get('/team_list/{query}', [TeamController::class, 'selectedShowTeams']); //chap7
+Route::get('/team_list/{genre?}', [TeamController::class, 'selectedShowTeams']); //chap7
 
-Route::post('/search_teams', [MemberController::class, 'searchTeams']);
+Route::post('/search_teams', [TeamController::class, 'searchTeams']);
 
-Route::post('/select_charge_teams', [MemberController::class, 'searchChargeTeams']);
+Route::post('/select_fee_teams', [TeamController::class, 'searchFeeTeams']);
