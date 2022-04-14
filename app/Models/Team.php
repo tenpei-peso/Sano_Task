@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
-use App\Models\Rank;
 
 
 class Team extends Model
@@ -88,36 +87,5 @@ class Team extends Model
             $selectedUser = $this->where([['fee', '>=', $minAgeData], ['fee', '<=', $maxAgeData], ['genre', '=', $genreData]])->get();
             return $selectedUser;
         }
-    }
-    // <----------リレーション------------------>
-
-    public function rank() {
-        return $this->hasOne(Rank::class, 'id', 'rank');
-    }
-
-    public function member() {
-        return $this->hasMany(Member::class);
-    }
-
-    public function members()
-    {
-        return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
-    }
-    // <----------リレーション------------------>
-
-        //relation <-------01 step2---------->
-    public function getAllTeamsWithRank(){
-        $teams = $this->with('rank')->get();
-        return $teams;
-    }
-
-    public function getHasManyMember(){
-        $teams = $this->where('id', 1)->with('member')->get();
-        return $teams;
-    }
-
-    public function getTeamsMembers(){
-        $teams = $this->where('id', 1)->with('members')->get();
-        return $teams;
     }
 }
