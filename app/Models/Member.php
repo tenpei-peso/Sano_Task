@@ -19,6 +19,7 @@ class Member extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'team_id',
         'name',
         'age',
         'area',
@@ -64,6 +65,22 @@ class Member extends Model
     public function allUser() {
         $user = DB::table('members')->get();
         return $user;
+    }
+    // <----------リレーション------------------>
+
+    public function team() {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'member_team', 'team_id', 'member_id');
+    }
+    // <----------リレーション------------------>
+
+    public function getTeamMember() {
+        $teams = $this->where('id', 1)->with('team')->get();
+        return $teams;
     }
 
 }

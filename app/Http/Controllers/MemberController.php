@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\PostRequest;
 
 
 
@@ -89,5 +88,13 @@ class MemberController extends Controller
             $ageUser = Member::all();
         }
         return $ageUser;
-}
+    }
+// <------------リレーション 02 step2------------>
+    public function getTeamMembers (Member $member) {
+        $members = $member->getTeamMember();
+        Log::info(json_encode($members, JSON_UNESCAPED_UNICODE));
+        return 'test';
+    }
+
+
 }

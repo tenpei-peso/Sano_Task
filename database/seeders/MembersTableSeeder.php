@@ -28,6 +28,7 @@ class MembersTableSeeder extends Seeder
 
             DB::table('members')->insert(
                 [
+                    'team_id' => Arr::random([1, 2, 3]),
                     'name' => "$i . さん",
                     'age' => $i,
                     'area' => Arr::random($area),

@@ -14,6 +14,9 @@ class TeamController extends Controller
         $getTeams = $team->getAllTeams();
         // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
 
+        //relation <-------01 step2---------->
+        $getAllData = $team->getAllTeamsWithRank();
+        Log::info(json_encode($getAllData, JSON_UNESCAPED_UNICODE));
         return 'test';
     }
 
@@ -42,5 +45,18 @@ class TeamController extends Controller
 
         $searchFeeData = $team->searchFeeTeams($minAgeData, $maxAgeData, $genreData);
         return $searchFeeData;
+    }
+
+    //<-------relation 02 step1---------->
+    public function getHasManyData(Team $team) {
+        $data = $team->getHasManyMember();
+        Log::info(json_encode($data, JSON_UNESCAPED_UNICODE));
+        return 'test';
+    }
+
+    public function getRelationData (Team $team) {
+        $data = $team->getTeamsMembers();
+        // Log::info(json_encode($data, JSON_UNESCAPED_UNICODE));
+        return $data;
     }
 }
