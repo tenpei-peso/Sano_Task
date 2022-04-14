@@ -25,22 +25,16 @@ class TeamController extends Controller
         return 'test';
     }
 
-    //<-------02 step4---------->
-    public function searchTeams(Team $team)
-    {
-        $team->searchTeams();
-        return 'test';
-    }
-
     //<-------02 step5---------->
-    public function searchFeeTeams(Team $team, Request $request)
+    public function searchTeam(Team $team, Request $request)
     {
-        $minAgeData = $request->input('minAge'); 
-        $maxAgeData = $request->input('maxAge');
+        $minFeeData = $request->input('minFee'); 
+        $maxFeeData = $request->input('maxFee');
         $genreData = $request->input('genre');
 
 
-        $searchFeeData = $team->searchFeeTeams($minAgeData, $maxAgeData, $genreData);
+        $searchFeeData = $team->searchTeamData($minFeeData, $maxFeeData, $genreData);
+        Log::info(json_encode($searchFeeData, JSON_UNESCAPED_UNICODE));
         return $searchFeeData;
     }
 }

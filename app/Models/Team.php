@@ -55,37 +55,54 @@ class Team extends Model
         $genreTeams = $this->where('genre', $genre)->get();
         return $genreTeams;
     }
-    //<-------02 step4---------->
-    public function searchTeams(){
-        return 'test';
-    }
 
     //<-------02 step5---------->
-    public function searchFeeTeams($minAgeData = null, $maxAgeData = null, $genreData){
+    public function searchTeamData($minFeeData, $maxFeeData, $genreData){
 
-        if(isset($minAgeData) && isset($maxAgeData)) {
-            $feeUser = $this->whereBetween('fee', [$minAgeData, $maxAgeData])->get();
-            return $feeUser;
-        }
+        //<----------直したところーーーーーーーーー>
+        $query = $this->query();
 
-        if(isset($minAgeData) && !isset($maxAgeData)) {
-            $feeUser = $this->where('fee', '>=', $minAgeData)->get();
-            return $feeUser;
+        if($minFeeData != null){
+            $query->where('fee', '>=', $minFeeData);
         }
+        
+        if($maxFeeData != null){
+            $query->where('fee', '<=', $maxFeeData);
+        }
+        
+        if($genreData != null){
+            $query->where('genre', $genreData);
+        }
+        
+        $teams = $query->get();
 
-        if(!isset($minAgeData) && isset($maxAgeData)) {
-            $feeUser = $this->where('fee', '<=', $maxAgeData)->get();
-            return $feeUser;
-        }
+        
+        return $teams;
+        //<----------直したところーーーーーーーーー>
 
-        if (!isset($minAgeData) && !isset($maxAgeData)) {
-            $feedUser = $this->all();
-            return $feedUser;
-        }
+    //     if(isset($minFeeData) && isset($maxFeeData)) {
+    //         $feeUser = $this->whereBetween('fee', [$minFeeData, $maxFeeData])->get();
+    //         return $feeUser;
+    //     }
 
-        if (isset($minAgeData) && isset($maxAgeData) && isset($genreData)) {
-            $selectedUser = $this->where([['fee', '>=', $minAgeData], ['fee', '<=', $maxAgeData], ['genre', '=', $genreData]])->get();
-            return $selectedUser;
-        }
+    //     if(isset($minFeeData) && !isset($maxFeeData)) {
+    //         $feeUser = $this->where('fee', '>=', $minFeeData)->get();
+    //         return $feeUser;
+    //     }
+
+    //     if(!isset($minFeeData) && isset($maxFeeData)) {
+    //         $feeUser = $this->where('fee', '<=', $maxFeeData)->get();
+    //         return $feeUser;
+    //     }
+
+    //     if (!isset($minFeeData) && !isset($maxFeeData)) {
+    //         $feedUser = $this->all();
+    //         return $feedUser;
+    //     }
+
+    //     if (isset($minFeeData) && isset($maxFeeData) && isset($genreData)) {
+    //         $selectedUser = $this->where([['fee', '>=', $minFeeData], ['fee', '<=', $maxFeeData], ['genre', '=', $genreData]])->get();
+    //         return $selectedUser;
+    //     }
     }
 }

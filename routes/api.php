@@ -19,6 +19,4 @@ Route::get('/team_list', [TeamController::class, 'showTeams']);
 
 Route::get('/team_list/{genre?}', [TeamController::class, 'selectedShowTeams']); //chap7
 
-Route::post('/search_teams', [TeamController::class, 'searchTeams']);
-
-Route::post('/select_fee_teams', [TeamController::class, 'searchFeeTeams']);
+Route::post('/select_teams', [TeamController::class, 'searchTeam']);
