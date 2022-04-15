@@ -61,24 +61,13 @@ class MemberController extends Controller
         // Log::info(json_encode($sortMembers, JSON_UNESCAPED_UNICODE));
 
         //<------  07 step3 ---------->
-        $isEmptyArea = $member->findAreaMembers($area)->isEmpty();
-
-        if (isset($area)){
-            $getAreaMembers = $member->findAreaMembers($area);
-            Log::info(json_encode($getAreaMembers, JSON_UNESCAPED_UNICODE));
+        $areaMembers = $member->findAreaMembers($area);
+        if ($areaMembers->isEmpty()) {
+            // Log::info("該当しない");
+            return "該当するユーザはいません";
         }
-
-        if (!isset($area)){
-            $getAreaMembers = $member->all();
-            Log::info(json_encode($getAreaMembers, JSON_UNESCAPED_UNICODE));
-        }
-
-        if ($isEmptyArea && isset($area)) {
-            Log::info('該当するユーザーはいません');
-        }
-
-
-        return 'test';
+        // Log::info(json_encode($areaMembers, JSON_UNESCAPED_UNICODE));
+        return $areaMembers;
     }
 
     public function show(Member $member, $id)
@@ -94,25 +83,13 @@ class MemberController extends Controller
         $maxAgeData = $request->input('maxAge'); //07 step4
 
         //<------  07 step5 ---------->
-        $selectUser = $member->minAgeUser($minAgeData);
-        // Log::info(json_encode($selectUser, JSON_UNESCAPED_UNICODE));
+        $selectUser = $member->searchSelectMembers($minAgeData);
+        // Log::info($maxAgeData);
 
 
         //<-------07 step6 ------>
-        if(isset($minAgeData) && isset($maxAgeData)) {
-            $selectedUserData = $member->selectAgeUser($minAgeData, $maxAgeData);
-            return $selectedUserData;
-        }
+        $selectMember = $member->searchSelectMembers($minAgeData, $maxAgeData);
 
-        if (isset($minAgeData) && !isset($maxAgeData)) {
-            $selectedUserData = $member->notMaxAgeUser($minAgeData);
-            return $selectedUserData;
-        }
-
-        if (!isset($minAgeData) && !isset($maxAgeData)) {
-            $selectedUserData = $member->all();
-            return $selectedUserData;
-        }
-        return 'test';
-}
+        return $selectMember;
+    }
 }

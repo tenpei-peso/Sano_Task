@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isEmpty;
 
 class Member extends Model
 {
@@ -74,28 +75,29 @@ class Member extends Model
 
     //<------  07 step3 ---------->
     public function findAreaMembers($area) {
-        $members = $this->where('area', $area)->get();
+        if ($area == !null) {
+            $members = $this->where('area', $area)->get();
+        } else {
+            $members = $this->all();
+        }
+
         return $members;
     }
 
-    //<------  07 step5 ---------->
-    public function minAgeUser($minAgeData) {
-        $members = $this->where('age', '>=', $minAgeData)->get();
+    //<------  07 step5 & 6 ---------->
+    public function searchSelectMembers($minAgeData = null, $maxAgeData = null) {
+        $query = $this->query();
+
+        if($minAgeData != null) {
+            $query->where('age', '>=', $minAgeData);
+        }
+
+        if($maxAgeData != null) {
+            $query->where('age', '<=', $maxAgeData);
+        }
+
+        $members = $query->get();
         return $members;
     }
-
-    //<------  07 step6 ---------->
-    public function selectAgeUser($minAgeData, $maxAgeData ) {
-        $members = $this->whereBetween('age', [$minAgeData, $maxAgeData])->get();
-        return $members;
-    }
-
-    public function notMaxAgeUser($minAgeData) {
-        $members = $this->where('age', '>=', $minAgeData)->get();
-        return $members;
-    }
-
-
-
 
 }
