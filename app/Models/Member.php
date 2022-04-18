@@ -47,23 +47,55 @@ class Member extends Model
     ];
     
     public function getIdUser(){
-        $user = DB::table('members')->where('id', 1)->get();
+        $user = $this->where('id', 1)->get();
         return $user;
     }
 
     public function getAreaUser(){
-        $user = DB::table('members')->where('area', '東京')->get();
+        $user = $this->where('area', '東京')->get();
         return $user;
     }
 
     public function getAgeUser(){
-        $user = DB::table('members')->where('age', '<=', 30)->get();
+        $user = $this->where('age', '<=', 30)->get();
         return $user;
     }
 
     public function allUser() {
-        $user = DB::table('members')->get();
+        $user = $this->all();
         return $user;
     }
+
+    //<------  07 step1 ---------->
+    public function findIdUser($id) {
+        $findUser = $this->find($id);
+        return $findUser;
+    }
+
+    //<------  07 step3 ---------->
+    public function findAreaMembers($area) {
+        $members = $this->where('area', $area)->get();
+        return $members;
+    }
+
+    //<------  07 step5 ---------->
+    public function minAgeUser($minAgeData) {
+        $members = $this->where('age', '>=', $minAgeData)->get();
+        return $members;
+    }
+
+    //<------  07 step6 ---------->
+    public function selectAgeUser($minAgeData, $maxAgeData ) {
+        $members = $this->whereBetween('age', [$minAgeData, $maxAgeData])->get();
+        return $members;
+    }
+
+    public function notMaxAgeUser($minAgeData) {
+        $members = $this->where('age', '>=', $minAgeData)->get();
+        return $members;
+    }
+
+
+
 
 }
