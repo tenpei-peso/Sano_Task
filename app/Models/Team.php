@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 
 class Team extends Model
@@ -47,37 +49,56 @@ class Team extends Model
 
     //<-------02 step1---------->
     public function getAllTeams(){
-        $teams = $this->all();
-        return $teams;
+        try {
+            $teams = $this->all();
+            return $teams;
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
     //<-------02 step3---------->
     public function getGenreTeams($genre){
-        $genreTeams = $this->where('genre', $genre)->get();
-        return $genreTeams;
+        try {
+            $genreTeams = $this->where('genre', $genre)->get();
+            return $genreTeams;
+
+        } catch (\Exception $e){
+            Log::emergency('props内容: . $genre');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
 
     //<-------02 step5---------->
     public function searchTeamData($minFeeData, $maxFeeData, $genreData){
 
         //<----------直したところーーーーーーーーー>
-        $query = $this->query();
-
-        if($minFeeData != null){
-            $query->where('fee', '>=', $minFeeData);
+        try {
+            $query = $this->query();
+    
+            if($minFeeData != null){
+                $query->where('fee', '>=', $minFeeData);
+            }
+            
+            if($maxFeeData != null){
+                $query->where('fee', '<=', $maxFeeData);
+            }
+            
+            if($genreData != null){
+                $query->where('genre', $genreData);
+            }
+            
+            $teams = $query->get();
+            return $teams;
+            
+        } catch (\Exception $e){
+            Log::emergency('props内容1: . $minFeeData');
+            Log::emergency('props内容2: . $maxFeeData');
+            Log::emergency('props内容3: . $genreData');
+            Log::emergency($e->getMessage());
+            throw $e;
         }
-        
-        if($maxFeeData != null){
-            $query->where('fee', '<=', $maxFeeData);
-        }
-        
-        if($genreData != null){
-            $query->where('genre', $genreData);
-        }
-        
-        $teams = $query->get();
-
-        
-        return $teams;
         //<----------直したところーーーーーーーーー>
 
     //     if(isset($minFeeData) && isset($maxFeeData)) {
