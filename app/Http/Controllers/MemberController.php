@@ -61,6 +61,7 @@ class MemberController extends Controller
         // Log::info(json_encode($sortMembers, JSON_UNESCAPED_UNICODE));
 
         //<------  07 step3 ---------->
+
         $isEmptyArea = $member->findAreaMembers($area)->isEmpty();
 
         if (isset($area)){
