@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\PracticeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,10 +17,13 @@ Route::post('/search_members', [MemberController::class, 'searchMembers']);
 
 //テスト
 
-Route::get('/team_list', [TeamController::class, 'showTeams']); 
+Route::get('/team_list/{id?}', [TeamController::class, 'showTeams']); 
 
 Route::get('/team_list/{genre?}', [TeamController::class, 'selectedShowTeams']); //chap7
 
 Route::post('/select_teams', [TeamController::class, 'searchTeam']);
 
 Route::post('/search_members', [MemberController::class, 'searchMembers']);
+
+//Laravel課題３
+Route::get('/practice_list/{time?}', [PracticeController::class, 'getPracticeData']); 

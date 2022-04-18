@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
-    public function showTeams (Team $team) {
+    public function showTeams (Team $team, $id) {
         //<-------02 step1---------->
-        $getTeams = $team->getAllTeams();
+        $getTeams = $team->getTeams($id);
         // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
 
-        return 'test';
+        return $getTeams;
     }
 
     //<-------02 step3---------->

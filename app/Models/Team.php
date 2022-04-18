@@ -26,28 +26,22 @@ class Team extends Model
         'rank',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // <-------------リレーション--------->
+    public function practice()
+    {
+        return $this->hasMany(Practice::class);
+    }
 
     //<-------02 step1---------->
-    public function getAllTeams(){
-        $teams = $this->all();
+    //<---------laravel３課題 発展４----------->
+    public function getTeams($id){
+        $query = $this->query();
+
+        if($id != null) {
+            $query->where('id', $id);
+        }
+
+        $teams = $query->with('practice.members')->get();
         return $teams;
     }
     //<-------02 step3---------->
@@ -78,31 +72,6 @@ class Team extends Model
 
         
         return $teams;
-        //<----------直したところーーーーーーーーー>
-
-    //     if(isset($minFeeData) && isset($maxFeeData)) {
-    //         $feeUser = $this->whereBetween('fee', [$minFeeData, $maxFeeData])->get();
-    //         return $feeUser;
-    //     }
-
-    //     if(isset($minFeeData) && !isset($maxFeeData)) {
-    //         $feeUser = $this->where('fee', '>=', $minFeeData)->get();
-    //         return $feeUser;
-    //     }
-
-    //     if(!isset($minFeeData) && isset($maxFeeData)) {
-    //         $feeUser = $this->where('fee', '<=', $maxFeeData)->get();
-    //         return $feeUser;
-    //     }
-
-    //     if (!isset($minFeeData) && !isset($maxFeeData)) {
-    //         $feedUser = $this->all();
-    //         return $feedUser;
-    //     }
-
-    //     if (isset($minFeeData) && isset($maxFeeData) && isset($genreData)) {
-    //         $selectedUser = $this->where([['fee', '>=', $minFeeData], ['fee', '<=', $maxFeeData], ['genre', '=', $genreData]])->get();
-    //         return $selectedUser;
-    //     }
     }
+
 }
