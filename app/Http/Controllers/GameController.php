@@ -12,8 +12,8 @@ class GameController extends Controller
 {
     public function getGameListData(Game $game) {
         try {
-            $game->getGameData();
-            return $game;
+            $gameData = $game->getGameData();
+            return $gameData;
         } catch (\Exception $e){
             Log::emergency($e->getMessage());
             return $e;
