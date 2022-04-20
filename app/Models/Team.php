@@ -27,25 +27,6 @@ class Team extends Model
         'rank',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
     //<-------02 step1---------->
     public function getAllTeams(){
         $teams = $this->all();
@@ -110,7 +91,7 @@ class Team extends Model
         $teams = $this->with('rank')->get();
         return $teams;
     }
-
+        //relation <-------02 step1---------->
     public function getHasManyMember(){
         $teams = $this->where('id', 1)->with('member')->get();
         return $teams;

@@ -72,14 +72,10 @@ class Member extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function teams()
-    {
-        return $this->belongsToMany(Team::class, 'member_team', 'team_id', 'member_id');
-    }
-    // <----------リレーション------------------>
+    // <----------リレーション02 step2------------------>
 
-    public function getTeamMember() {
-        $teams = $this->where('id', 1)->with('team')->get();
+    public function getTeamMember($id) {
+        $teams = $this->where('id', $id)->with('team')->get();
         return $teams;
     }
 

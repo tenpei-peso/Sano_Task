@@ -7,14 +7,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/member_list/{area?}', [MemberController::class, 'showMemberList']);
 
-Route::get('/member_detail/{id}', [MemberController::class, 'show']); //chap7
+Route::get('/member_detail/{id}', [MemberController::class, 'memberDetail']); //chap7
 
 Route::get('/member_detail', [MemberController::class, 'index']); //chap7
 
 Route::post('/search_members', [MemberController::class, 'searchMembers']);
-// <-------リレーション---------->
-Route::get('/search_team_member', [MemberController::class, 'getTeamMembers']);
-
 
 //テスト
 

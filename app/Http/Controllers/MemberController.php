@@ -58,12 +58,13 @@ class MemberController extends Controller
         return 'test';
     }
 
-    public function show($id)
+    // <----------リレーション02 step2------------------>
+    public function memberDetail(Member $member, $id)
     {
 
-        $getUsers = Member::find($id); //07 step1 URLから該当するユーザー取得
-
-        return $getUsers;
+        $getMember = $member->getTeamMember($id); 
+        Log::info(json_encode($getMember, JSON_UNESCAPED_UNICODE));
+        return $getMember;
     }
 
     public function index() {   //07 step2 ユーザー全部表示
@@ -89,12 +90,4 @@ class MemberController extends Controller
         }
         return $ageUser;
     }
-// <------------リレーション 02 step2------------>
-    public function getTeamMembers (Member $member) {
-        $members = $member->getTeamMember();
-        Log::info(json_encode($members, JSON_UNESCAPED_UNICODE));
-        return 'test';
-    }
-
-
 }
