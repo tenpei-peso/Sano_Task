@@ -28,25 +28,6 @@ class Team extends Model
         'rank',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
     //<-------02 step1---------->
     public function getAllTeams(){
         try {
@@ -99,31 +80,37 @@ class Team extends Model
             Log::emergency($e->getMessage());
             throw $e;
         }
-        //<----------直したところーーーーーーーーー>
+    }
+    // <----------リレーション------------------>
 
-    //     if(isset($minFeeData) && isset($maxFeeData)) {
-    //         $feeUser = $this->whereBetween('fee', [$minFeeData, $maxFeeData])->get();
-    //         return $feeUser;
-    //     }
+    public function rank() {
+        return $this->hasOne(Rank::class, 'id', 'rank');
+    }
 
-    //     if(isset($minFeeData) && !isset($maxFeeData)) {
-    //         $feeUser = $this->where('fee', '>=', $minFeeData)->get();
-    //         return $feeUser;
-    //     }
+    public function member() {
+        return $this->hasMany(Member::class);
+    }
 
-    //     if(!isset($minFeeData) && isset($maxFeeData)) {
-    //         $feeUser = $this->where('fee', '<=', $maxFeeData)->get();
-    //         return $feeUser;
-    //     }
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
+    }
+    // <----------リレーション------------------>
 
-    //     if (!isset($minFeeData) && !isset($maxFeeData)) {
-    //         $feedUser = $this->all();
-    //         return $feedUser;
-    //     }
+        //relation <-------01 step2---------->
+    public function getAllTeamsWithRank(){
+        $teams = $this->with('rank')->get();
+        return $teams;
+    }
+        //relation <-------02 step1---------->
+    public function getHasManyMember(){
+        $teams = $this->where('id', 1)->with('member')->get();
+        return $teams;
+    }
 
-    //     if (isset($minFeeData) && isset($maxFeeData) && isset($genreData)) {
-    //         $selectedUser = $this->where([['fee', '>=', $minFeeData], ['fee', '<=', $maxFeeData], ['genre', '=', $genreData]])->get();
-    //         return $selectedUser;
-    //     }
+    public function getTeamsMembers(){
+        $teams = $this->where('id', 1)->with('members')->get();
+        return $teams;
+
     }
 }

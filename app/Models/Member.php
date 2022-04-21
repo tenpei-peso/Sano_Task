@@ -105,6 +105,19 @@ class Member extends Model
         }
     }
 
+    // <----------リレーション02 step2------------------>
+
+    public function getTeamMember($id) {
+        try{
+            $teams = $this->where('id', $id)->with('team')->get();
+            return $teams;
+        } catch(\Exception $e) {
+            Log::emergency('props内容: . $id');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
     //<------  07 step3 ---------->
     public function findAreaMembers($area) {
         try {

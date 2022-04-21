@@ -132,18 +132,23 @@ class MemberController extends Controller
         }
     }
 
-    public function show(Member $member, $id)
+    // <----------リレーション02 step2------------------>
+    public function memberDetail(Member $member, $id)
     {
-        //<------  07 step1 ---------->
         try {
-            $findIdUser = $member->findIdUser($id); 
-            Log::info(json_encode($findIdUser, JSON_UNESCAPED_UNICODE));
-            return 'test';
-        } catch (\Exception $e){
+            $getMember = $member->getTeamMember($id); 
+            Log::info(json_encode($getMember, JSON_UNESCAPED_UNICODE));
+            return $getMember;
+        } catch (\Exception $e) {
             Log::emergency('postId: . $id');
             Log::emergency($e->getMessage());
             return $e;
         }
+    }
+
+    public function index() {   //07 step2 ユーザー全部表示
+        $allMember = Member::all();
+        return $allMember;
     }
 
     public function searchMembers(Request $request, Member $member) {
