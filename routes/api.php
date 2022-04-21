@@ -33,6 +33,10 @@ Route::get('/team_list/{genre?}', [TeamController::class, 'selectedShowTeams']);
 Route::post('/select_teams', [TeamController::class, 'searchTeam']);
 //<----------テスト1-------->
 
+//<----------リレーション-------->
+Route::get('/get_team_member_data', [TeamController::class, 'getTeamMemberData']); 
+//<----------リレーション-------->
+
 //<----------基礎課題3-------->
 Route::post('/create_team_data', [TeamController::class, 'createTeamData']);
 
