@@ -18,6 +18,7 @@ class Team extends Model
     ];
     public $timestamps = false;
 
+
     //<-------02 step1---------->
     public function getAllTeams(){
         try {
@@ -70,6 +71,38 @@ class Team extends Model
             Log::emergency($e->getMessage());
             throw $e;
         }
+    }
+
+    // <----------リレーション------------------>
+
+    public function rank() {
+        return $this->hasOne(Rank::class, 'id', 'rank');
+    }
+
+    public function member() {
+        return $this->hasMany(Member::class);
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
+    }
+    // <----------リレーション------------------>
+
+        //relation <-------01 step2---------->
+    public function getAllTeamsWithRank(){
+        $teams = $this->with('rank')->get();
+        return $teams;
+    }
+        //relation <-------02 step1---------->
+    public function getHasManyMember(){
+        $teams = $this->where('id', 1)->with('member')->get();
+        return $teams;
+    }
+
+    public function getTeamsMembers(){
+        $teams = $this->where('id', 1)->with('members')->get();
+        return $teams;
     }
 
      //<-------基礎課題３ 08 step4--------->
