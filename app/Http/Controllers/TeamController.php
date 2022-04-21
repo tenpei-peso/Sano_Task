@@ -14,7 +14,7 @@ class TeamController extends Controller
         try {
             $getTeams = $team->getAllTeams();
             // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
-            return 'test';
+            return $getTeams;
             
         } catch (\Exception $e){
             Log::emergency($e->getMessage());
@@ -53,6 +53,53 @@ class TeamController extends Controller
             Log::emergency('request1: . $minFeeData');
             Log::emergency('request2: . $maxFeeData');
             Log::emergency('request3: . $genreData');
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step4--------->
+    public function createTeamData (Request $request, Team $team) {
+        $postData = $request->only(['name', 'explain', 'genre', 'fee', 'rank',]);
+        try {
+            $createdData = $team->createTeamDataModel($postData);
+            return $createdData;
+
+        } catch (\Exception $e){
+            Log::emergency($postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step4--------->
+    public function updateTeamData (Request $request, Team $team) {
+        $postData = $request->only(['id', 'name', 'explain', 'genre', 'fee', 'rank']);
+        $postId = $request->input('id');
+
+        try {
+            $updatedData = $team->updateTeamDataModel($postData, $postId);
+            return $updatedData;
+
+        } catch (\Exception $e){
+            Log::emergency('失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step4--------->
+    public function deleteTeamData (Request $request, Team $team) {
+        $requestId = $request->input('id');
+
+        try {
+            $deleteData = $team->deleteTeamDataModel($requestId);
+            Log::emergency($requestId);
+            return '成功' . $deleteData;
+
+        } catch (\Exception $e){
+            Log::emergency($requestId);
+            Log::emergency('失敗');
             Log::emergency($e->getMessage());
             return $e;
         }

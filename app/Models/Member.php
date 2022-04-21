@@ -17,38 +17,12 @@ class Member extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'age',
-        'area',
-        'leader',
-        'comment',
-        'gender'
+    protected $guarded = [
+        'id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public $timestamps = false;
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
     
     public function getIdUser(){
         try {
@@ -140,6 +114,55 @@ class Member extends Model
 
         } catch (\Exception $e){
             Log::emergency('props内容: . $minAgeData . $maxAgeData');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step1--------->
+    public function createMemberDataModel ($postData) {
+        try {
+            $createdDataModel = $this->create($postData);
+            Log::info('データ作成に成功:'. $createdDataModel);
+            return $createdDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('データ作成に失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+     //<-------基礎課題３ 08 step2--------->
+    public function updateMemberDataModel ($postData, $postId) {
+        try {
+            $updatedMemberDataModel = $this->where('id', $postId)->update($postData);
+
+            Log::info('アップデートに成功:'. $updatedMemberDataModel);
+            Log::info(json_encode($postData, JSON_UNESCAPED_UNICODE));
+            Log::info(json_encode($postId, JSON_UNESCAPED_UNICODE));
+
+            return $updatedMemberDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('アップデートに失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+     //<-------基礎課題３ 08 step3--------->
+    public function deleteMemberDataModel ($id) {
+        try {
+            $deleteMemberDataModel = $this->where('id', $id)->delete();
+
+            Log::info('削除に成功:'. $deleteMemberDataModel);
+            Log::info(json_encode($id, JSON_UNESCAPED_UNICODE));
+
+            return $deleteMemberDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('削除に失敗:');
             Log::emergency($e->getMessage());
             throw $e;
         }

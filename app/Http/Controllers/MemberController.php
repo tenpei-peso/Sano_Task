@@ -166,4 +166,51 @@ class MemberController extends Controller
             return $e;
         }
     }
+
+    //<-------基礎課題３ 08 step1--------->
+    public function createMemberData (Request $request, Member $member) {
+        $postData = $request->only(['name', 'age', 'area', 'leader', 'comment', 'gender',]);
+        try {
+            $createdData = $member->createMemberDataModel($postData);
+            return $createdData->id;
+
+        } catch (\Exception $e){
+            Log::emergency('データ作成に失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step2--------->
+    public function updateMemberData (Request $request, Member $member) {
+        $postData = $request->only(['id', 'name', 'age', 'area', 'leader', 'comment', 'gender',]);
+        $postId = $request->input('id');
+
+        try {
+            $updatedData = $member->updateMemberDataModel($postData, $postId);
+            return $updatedData;
+
+        } catch (\Exception $e){
+            Log::emergency('失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step3--------->
+    public function deleteMemberData (Request $request, Member $member) {
+        $requestId = $request->input('id');
+
+        try {
+            $deleteData = $member->deleteMemberDataModel($requestId);
+            Log::emergency($requestId);
+            return '成功' . $deleteData;
+
+        } catch (\Exception $e){
+            Log::emergency($requestId);
+            Log::emergency('失敗');
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
 }

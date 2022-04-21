@@ -4,48 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Team extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'explain',
-        'genre',
-        'fee',
-        'rank',
+    protected $guarded = [
+        'id',
     ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public $timestamps = false;
 
     //<-------02 step1---------->
     public function getAllTeams(){
@@ -99,31 +70,54 @@ class Team extends Model
             Log::emergency($e->getMessage());
             throw $e;
         }
-        //<----------直したところーーーーーーーーー>
+    }
 
-    //     if(isset($minFeeData) && isset($maxFeeData)) {
-    //         $feeUser = $this->whereBetween('fee', [$minFeeData, $maxFeeData])->get();
-    //         return $feeUser;
-    //     }
+     //<-------基礎課題３ 08 step4--------->
+    public function createTeamDataModel ($postData) {
+        try {
+            $createdDataModel = $this->create($postData);
+            Log::info('データ作成に成功:'. $createdDataModel);
+            return $createdDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('データ作成に失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 
-    //     if(isset($minFeeData) && !isset($maxFeeData)) {
-    //         $feeUser = $this->where('fee', '>=', $minFeeData)->get();
-    //         return $feeUser;
-    //     }
+     //<-------基礎課題３ 08 step4--------->
+    public function updateTeamDataModel ($postData, $postId) {
+        try {
+            $updatedTeamDataModel = $this->where('id', $postId)->update($postData);
 
-    //     if(!isset($minFeeData) && isset($maxFeeData)) {
-    //         $feeUser = $this->where('fee', '<=', $maxFeeData)->get();
-    //         return $feeUser;
-    //     }
+            Log::info('アップデートに成功:'. $updatedTeamDataModel);
+            Log::info(json_encode($postData, JSON_UNESCAPED_UNICODE));
+            Log::info(json_encode($postId, JSON_UNESCAPED_UNICODE));
 
-    //     if (!isset($minFeeData) && !isset($maxFeeData)) {
-    //         $feedUser = $this->all();
-    //         return $feedUser;
-    //     }
+            return $updatedTeamDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('アップデートに失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 
-    //     if (isset($minFeeData) && isset($maxFeeData) && isset($genreData)) {
-    //         $selectedUser = $this->where([['fee', '>=', $minFeeData], ['fee', '<=', $maxFeeData], ['genre', '=', $genreData]])->get();
-    //         return $selectedUser;
-    //     }
+     //<-------基礎課題３ 08 step4--------->
+    public function deleteTeamDataModel ($id) {
+        try {
+            $deleteTeamDataModel = $this->where('id', $id)->delete();
+
+            Log::info('削除に成功:'. $deleteTeamDataModel);
+            Log::info(json_encode($id, JSON_UNESCAPED_UNICODE));
+
+            return $deleteTeamDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('削除に失敗:');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
 }
