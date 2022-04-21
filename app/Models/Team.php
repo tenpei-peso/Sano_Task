@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
-use App\Models\Rank;
+use Illuminate\Support\Facades\Log;
+
 
 
 class Team extends Model
@@ -29,45 +30,55 @@ class Team extends Model
 
     //<-------02 step1---------->
     public function getAllTeams(){
-        $teams = $this->all();
-        return $teams;
+        try {
+            $teams = $this->all();
+            return $teams;
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
     //<-------02 step3---------->
     public function getGenreTeams($genre){
-        $genreTeams = $this->where('genre', $genre)->get();
-        return $genreTeams;
-    }
-    //<-------02 step4---------->
-    public function searchTeams(){
-        return 'test';
+        try {
+            $genreTeams = $this->where('genre', $genre)->get();
+            return $genreTeams;
+
+        } catch (\Exception $e){
+            Log::emergency('props内容: . $genre');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
 
     //<-------02 step5---------->
-    public function searchFeeTeams($minAgeData = null, $maxAgeData = null, $genreData){
+    public function searchTeamData($minFeeData, $maxFeeData, $genreData){
 
-        if(isset($minAgeData) && isset($maxAgeData)) {
-            $feeUser = $this->whereBetween('fee', [$minAgeData, $maxAgeData])->get();
-            return $feeUser;
-        }
-
-        if(isset($minAgeData) && !isset($maxAgeData)) {
-            $feeUser = $this->where('fee', '>=', $minAgeData)->get();
-            return $feeUser;
-        }
-
-        if(!isset($minAgeData) && isset($maxAgeData)) {
-            $feeUser = $this->where('fee', '<=', $maxAgeData)->get();
-            return $feeUser;
-        }
-
-        if (!isset($minAgeData) && !isset($maxAgeData)) {
-            $feedUser = $this->all();
-            return $feedUser;
-        }
-
-        if (isset($minAgeData) && isset($maxAgeData) && isset($genreData)) {
-            $selectedUser = $this->where([['fee', '>=', $minAgeData], ['fee', '<=', $maxAgeData], ['genre', '=', $genreData]])->get();
-            return $selectedUser;
+        //<----------直したところーーーーーーーーー>
+        try {
+            $query = $this->query();
+    
+            if($minFeeData != null){
+                $query->where('fee', '>=', $minFeeData);
+            }
+            
+            if($maxFeeData != null){
+                $query->where('fee', '<=', $maxFeeData);
+            }
+            
+            if($genreData != null){
+                $query->where('genre', $genreData);
+            }
+            
+            $teams = $query->get();
+            return $teams;
+            
+        } catch (\Exception $e){
+            Log::emergency('props内容1: . $minFeeData');
+            Log::emergency('props内容2: . $maxFeeData');
+            Log::emergency('props内容3: . $genreData');
+            Log::emergency($e->getMessage());
+            throw $e;
         }
     }
     // <----------リレーション------------------>
@@ -100,5 +111,6 @@ class Team extends Model
     public function getTeamsMembers(){
         $teams = $this->where('id', 1)->with('members')->get();
         return $teams;
+
     }
 }

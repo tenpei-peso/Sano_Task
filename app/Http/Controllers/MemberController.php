@@ -5,66 +5,145 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\PostRequest;
 
 
 
 class MemberController extends Controller
 {
     public function showMemberList(Member $member, $area = null) {
-        $fetchIdUser = $member->getIdUser(); //04 step3
-        $fetchAreaUser = $member->getAreaUser(); //04 step4
-        $fetchAgeUser = $member->getAgeUser(); //04 step5
-
-
-        $allMember = $member::all();  //05 step1
-        $tokyoUser = $allMember->firstWhere('area','東京'); //05 step2
-        $ageTwentyFive = $allMember->where('age', '>=', 25); //05 step3
-
-        $ageHasData = $allMember->where('age', '<=', 20)->isNotEmpty(); //05 step4
-
-        if($ageHasData) {
-            // Log::info("２０歳以下がいます");
-        } else {
-            // Log::info("いません");
+        try {
+            $fetchIdUser = $member->getIdUser(); //04 step3
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
         }
 
-        $memberCount = $allMember->count();  //05 step5
+        try {
+            $fetchAreaUser = $member->getAreaUser(); //04 step4
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
 
-        $tokyoMembers = $allMember->map(function($item) {  //05 step6
-            if ($item['area'] == '東京') {
-                return $item;
+        try {
+            $fetchAgeUser = $member->getAgeUser(); //04 step5
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+
+        //<----------05 step1 ------------------>
+        try {
+            $allMember = $member->allUser();  
+            // Log::info(json_encode($allMember, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+
+        //<----------05 step2 ------------------>
+        try {
+            $tokyoUser = $allMember->firstWhere('area','東京'); 
+            // Log::info(json_encode($tokyoUser, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+
+        //<----------05 step3 ------------------>
+        try {
+            $ageTwentyFive = $allMember->where('age', '>=', 25); 
+            // Log::info(json_encode($ageTwentyFive, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+
+        //<----------05 step4 ------------------>
+        try {
+            $ageHasData = $allMember->where('age', '<=', 20);
+            if(isset($ageHasData)) {
+                // Log::info(json_encode($ageHasData, JSON_UNESCAPED_UNICODE));
+            } 
+            if (!isset($ageHasData)) {
+                // Log::info('20歳以下はいません');
             }
-        });
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
 
-        $areaData = $allMember->pluck('area');  //05 step7
 
-        $sortMembers = $allMember->sortByDesc('age');  //05 step8
+        //<----------05 step5 ------------------>
+        try {
+            $memberCount = $allMember->count(); 
+            // Log::info(json_encode($memberCount, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+        
+        //<----------05 step6 ------------------>
+        try {
+            $tokyoMembers = $allMember->map(function($item) { 
+                if ($item['area'] == '東京') {
+                    return $item;
+                }
+            });
+            // Log::info(json_encode($tokyoMembers, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+        
+        //<----------05 step7 ------------------>
+        try {
+            $areaData = $allMember->pluck('area'); 
+            // Log::info(json_encode($areaData, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
 
-        // Log::info($sortMembers);
+        //<----------05 step8 ------------------>
+        try {
+            $sortMembers = $allMember->sortByDesc('age');
+            // Log::info(json_encode($sortMembers, JSON_UNESCAPED_UNICODE));
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
 
         //<------  07 step3 ---------->
-        $emptyData = Member::where('area', $area)->get()->isNotEmpty();
+        try {
+            $areaMembers = $member->findAreaMembers($area);
+            if ($areaMembers->isEmpty()) {
+                // Log::info("該当しない");
+                return "該当するユーザはいません";
+            }
+            // Log::info(json_encode($areaMembers, JSON_UNESCAPED_UNICODE));
+            return $areaMembers;
 
-        if (empty($area)) {     
-            $memberUser = Member::all();
-            Log::info(json_encode($memberUser, JSON_UNESCAPED_UNICODE));
-        } elseif ($emptyData) {
-            $memberUser = Member::where('area', $area)->get();
-            Log::info(json_encode($memberUser, JSON_UNESCAPED_UNICODE));
-        } elseif (!$emptyData) {
-            Log::info('該当するユーザーはいません');
+        } catch (\Exception $e){
+            Log::emergency('post内容: . $area');
+            Log::emergency($e->getMessage());
+            return $e;
         }
-
-        return 'test';
     }
 
     // <----------リレーション02 step2------------------>
     public function memberDetail(Member $member, $id)
     {
-
-        $getMember = $member->getTeamMember($id); 
-        Log::info(json_encode($getMember, JSON_UNESCAPED_UNICODE));
-        return $getMember;
+        try {
+            $getMember = $member->getTeamMember($id); 
+            Log::info(json_encode($getMember, JSON_UNESCAPED_UNICODE));
+            return $getMember;
+        } catch (\Exception $e) {
+            Log::emergency('postId: . $id');
+            Log::emergency($e->getMessage());
+            return $e;
+        }
     }
 
     public function index() {   //07 step2 ユーザー全部表示
@@ -72,22 +151,24 @@ class MemberController extends Controller
         return $allMember;
     }
 
-    public function searchMembers(Request $request) {
+    public function searchMembers(Request $request, Member $member) {
         $minAgeData = $request->input('minAge'); 
         $maxAgeData = $request->input('maxAge'); //07 step4
 
-        
-        $selectUser = Member::where('age', '>=', $minAgeData)->get();// 07 step5
+        //<------  07 step5 ---------->
+        try {
+            $selectUser = $member->searchSelectMembers($minAgeData);
+            // Log::info($maxAgeData);
+    
+    
+            //<-------07 step6 ------>
+            $selectMember = $member->searchSelectMembers($minAgeData, $maxAgeData);
+            return $selectMember;
 
-        //<-------07 step6 ------>
-
-        if (!empty($minAgeData) && !empty($maxAgeData)) {
-            $ageUser = Member::whereBetween('age', [$minAgeData, $maxAgeData])->get();
-        } elseif(empty($maxAgeData)) {
-            $ageUser = Member::where('age', '>=', $minAgeData)->get();
-        } elseif(empty($minAgeData) && empty($maxAgeData)) {
-            $ageUser = Member::all();
+        } catch (\Exception $e){
+            Log::emergency('request内容: . $minAgeData . $maxAgeData');
+            Log::emergency($e->getMessage());
+            return $e;
         }
-        return $ageUser;
     }
 }
