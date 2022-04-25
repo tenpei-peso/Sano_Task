@@ -28,12 +28,6 @@ class Team extends Model
         'rank',
     ];
 
-    // <-------------リレーション--------->
-    public function practice()
-    {
-        return $this->hasMany(Practice::class);
-    }
-
     //<-------02 step1---------->
     //<---------laravel３課題 発展４----------->
     public function getTeams($id){
@@ -95,18 +89,41 @@ class Team extends Model
             Log::emergency($e->getMessage());
             throw $e;
         }
-        
-        if($maxFeeData != null){
-            $query->where('fee', '<=', $maxFeeData);
-        }
-        
-        if($genreData != null){
-            $query->where('genre', $genreData);
-        }
-        
-        $teams = $query->get();
+    }
+    // <----------リレーション------------------>
 
-        
+    public function rank() {
+        return $this->hasOne(Rank::class, 'id', 'rank');
+    }
+
+    public function member() {
+        return $this->hasMany(Member::class);
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
+    }
+  
+    public function practice()
+    {
+        return $this->hasMany(Practice::class);
+    }
+    // <----------リレーション------------------>
+
+        //relation <-------01 step2---------->
+    public function getAllTeamsWithRank(){
+        $teams = $this->with('rank')->get();
+        return $teams;
+    }
+        //relation <-------02 step1---------->
+    public function getHasManyMember(){
+        $teams = $this->where('id', 1)->with('member')->get();
+        return $teams;
+    }
+
+    public function getTeamsMembers(){
+        $teams = $this->where('id', 1)->with('members')->get();
         return $teams;
     }
 
