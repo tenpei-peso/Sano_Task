@@ -19,91 +19,91 @@ class Team extends Model
     public $timestamps = false;
 
 
-    // //<-------02 step1---------->
-    // public function getAllTeams(){
-    //     try {
-    //         $teams = $this->all();
-    //         return $teams;
-    //     } catch (\Exception $e){
-    //         Log::emergency($e->getMessage());
-    //         throw $e;
-    //     }
-    // }
-    // //<-------02 step3---------->
-    // public function getGenreTeams($genre){
-    //     try {
-    //         $genreTeams = $this->where('genre', $genre)->get();
-    //         return $genreTeams;
+    //<-------02 step1---------->
+    public function getAllTeams(){
+        try {
+            $teams = $this->all();
+            return $teams;
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+    //<-------02 step3---------->
+    public function getGenreTeams($genre){
+        try {
+            $genreTeams = $this->where('genre', $genre)->get();
+            return $genreTeams;
 
-    //     } catch (\Exception $e){
-    //         Log::emergency('props内容: . $genre');
-    //         Log::emergency($e->getMessage());
-    //         throw $e;
-    //     }
-    // }
+        } catch (\Exception $e){
+            Log::emergency('props内容: . $genre');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 
-    // //<-------02 step5---------->
-    // public function searchTeamData($minFeeData, $maxFeeData, $genreData){
+    //<-------02 step5---------->
+    public function searchTeamData($minFeeData, $maxFeeData, $genreData){
 
-    //     //<----------直したところーーーーーーーーー>
-    //     try {
-    //         $query = $this->query();
+        //<----------直したところーーーーーーーーー>
+        try {
+            $query = $this->query();
     
-    //         if($minFeeData != null){
-    //             $query->where('fee', '>=', $minFeeData);
-    //         }
+            if($minFeeData != null){
+                $query->where('fee', '>=', $minFeeData);
+            }
             
-    //         if($maxFeeData != null){
-    //             $query->where('fee', '<=', $maxFeeData);
-    //         }
+            if($maxFeeData != null){
+                $query->where('fee', '<=', $maxFeeData);
+            }
             
-    //         if($genreData != null){
-    //             $query->where('genre', $genreData);
-    //         }
+            if($genreData != null){
+                $query->where('genre', $genreData);
+            }
             
-    //         $teams = $query->get();
-    //         return $teams;
+            $teams = $query->get();
+            return $teams;
             
-    //     } catch (\Exception $e){
-    //         Log::emergency('props内容1: . $minFeeData');
-    //         Log::emergency('props内容2: . $maxFeeData');
-    //         Log::emergency('props内容3: . $genreData');
-    //         Log::emergency($e->getMessage());
-    //         throw $e;
-    //     }
-    // }
+        } catch (\Exception $e){
+            Log::emergency('props内容1: . $minFeeData');
+            Log::emergency('props内容2: . $maxFeeData');
+            Log::emergency('props内容3: . $genreData');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 
-    // // <----------リレーション------------------>
+    // <----------リレーション------------------>
 
-    // public function rank() {
-    //     return $this->hasOne(Rank::class, 'id', 'rank');
-    // }
+    public function rank() {
+        return $this->hasOne(Rank::class, 'id', 'rank');
+    }
 
-    // public function member() {
-    //     return $this->hasMany(Member::class);
-    // }
+    public function member() {
+        return $this->hasMany(Member::class);
+    }
 
-    // public function members()
-    // {
-    //     return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
-    // }
-    // // <----------リレーション------------------>
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
+    }
+    // <----------リレーション------------------>
 
-    //     //relation <-------01 step2---------->
-    // public function getAllTeamsWithRank(){
-    //     $teams = $this->with('rank')->get();
-    //     return $teams;
-    // }
-    //     //relation <-------02 step1---------->
-    // public function getHasManyMember(){
-    //     $teams = $this->where('id', 1)->with('member')->get();
-    //     return $teams;
-    // }
+        //relation <-------01 step2---------->
+    public function getAllTeamsWithRank(){
+        $teams = $this->with('rank')->get();
+        return $teams;
+    }
+        //relation <-------02 step1---------->
+    public function getHasManyMember(){
+        $teams = $this->where('id', 1)->with('member')->get();
+        return $teams;
+    }
 
-    // public function getTeamsMembers(){
-    //     $teams = $this->where('id', 1)->with('members')->get();
-    //     return $teams;
-    // }
+    public function getTeamsMembers(){
+        $teams = $this->where('id', 1)->with('members')->get();
+        return $teams;
+    }
 
      //<-------基礎課題３ 08 step4--------->
     public function createTeamDataModel ($postData) {
