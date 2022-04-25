@@ -178,13 +178,13 @@ class MemberController extends Controller
         try {
             DB::beginTransaction();
             //member作成
-            $createdData = $member->createMemberDataModel($postData);
+            $createdData = $member->createMember($postData);
             $memberDataId = $createdData->id;
 
             //teamsMembers作成
-            $createTeamMemberData = $member->createTeamMemberDataModel($memberDataId);
+            $createTeamMemberData = $member->createTeamMember($memberDataId);
             DB::commit();
-            Log::emergency('トランジション成功');
+            Log::info('トランジション成功');
             return $createTeamMemberData;
 
         } catch (\Exception $e){
@@ -198,11 +198,12 @@ class MemberController extends Controller
 
     //<-------基礎課題３ 08 step2--------->
     public function updateMemberData (Request $request, Member $member) {
-        $postData = $request->only(['id', 'name', 'age', 'area', 'leader', 'comment', 'gender',]);
+        $postData = $request->only(['name', 'age', 'area', 'leader', 'comment', 'gender',]);
         $postId = $request->input('id');
 
         try {
-            $updatedData = $member->updateMemberDataModel($postData, $postId);
+            $updatedData = $member->updateMember($postData, $postId);
+            Log::info('controllerアップデート成功');
             return $updatedData;
 
         } catch (\Exception $e){
@@ -217,8 +218,8 @@ class MemberController extends Controller
         $requestId = $request->input('id');
 
         try {
-            $deleteData = $member->deleteMemberDataModel($requestId);
-            Log::emergency($requestId);
+            $deleteData = $member->deleteMember($requestId);
+            Log::info('controller削除成功');
             return '成功' . $deleteData;
 
         } catch (\Exception $e){

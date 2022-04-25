@@ -121,7 +121,7 @@ class Team extends Model
     }
 
      //<-------基礎課題３ 08 step4--------->
-    public function createTeamDataModel ($postData) {
+    public function createTeam ($postData) {
         try {
             $createdDataModel = $this->create($postData);
             Log::info('データ作成に成功:'. $createdDataModel);
@@ -135,7 +135,7 @@ class Team extends Model
     }
 
      //<-------基礎課題３ 08 step4--------->
-    public function updateTeamDataModel ($postData, $postId) {
+    public function updateTeam ($postData, $postId) {
         try {
             $updatedTeamDataModel = $this->where('id', $postId)->update($postData);
 
@@ -153,7 +153,7 @@ class Team extends Model
     }
 
      //<-------基礎課題３ 08 step4--------->
-    public function deleteTeamDataModel ($id) {
+    public function deleteTeam ($id) {
         try {
             $deleteTeamDataModel = $this->where('id', $id)->delete();
 

@@ -142,7 +142,7 @@ class Member extends Model
         }
     }
     //<-------基礎課題３ 08 step1--------->
-    public function createMemberDataModel ($postData) {
+    public function createMember ($postData) {
         try {
             //member作成
             $createdDataModel = $this->create($postData);
@@ -158,11 +158,14 @@ class Member extends Model
         }
     }
     //<-------基礎課題３ 09 step1--------->
-    public function createTeamMemberDataModel ($memberDataId) {
+    public function createTeamMember ($memberDataId) {
         try {
+            //ランダムなチームidを作る
+            $randNumber = rand(1, 30);
+
             //teamsMembers作成
             $createdTeamMembersModel = DB::table('teams_members')->insert([
-                'team_id' => $memberDataId-90,
+                'team_id' => $memberDataId-$randNumber,
                 'member_id' => $memberDataId
             ]);
 
@@ -178,7 +181,7 @@ class Member extends Model
     }
 
      //<-------基礎課題３ 08 step2--------->
-    public function updateMemberDataModel ($postData, $postId) {
+    public function updateMember ($postData, $postId) {
         try {
             $updatedMemberDataModel = $this->where('id', $postId)->update($postData);
 
@@ -196,7 +199,7 @@ class Member extends Model
     }
 
      //<-------基礎課題３ 08 step3--------->
-    public function deleteMemberDataModel ($id) {
+    public function deleteMember ($id) {
         try {
             $deleteMemberDataModel = $this->where('id', $id)->delete();
 

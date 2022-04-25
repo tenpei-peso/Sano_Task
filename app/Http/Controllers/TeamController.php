@@ -61,7 +61,7 @@ class TeamController extends Controller
     public function getTeamMemberData(Team $team) {
         try{
             $getData = $team->getTeamsMembers();
-            Log::emergency('デート取得成功' . $getData);
+            Log::info('デート取得成功' . $getData);
             return $getData;
         } catch(\Exception $e) {
             Log::emergency($e->getMessage());
@@ -74,7 +74,8 @@ class TeamController extends Controller
     public function createTeamData (Request $request, Team $team) {
         $postData = $request->only(['name', 'explain', 'genre', 'fee', 'rank',]);
         try {
-            $createdData = $team->createTeamDataModel($postData);
+            $createdData = $team->createTeam($postData);
+            Log::info('controllerでの作成成功');
             return $createdData;
 
         } catch (\Exception $e){
@@ -86,11 +87,12 @@ class TeamController extends Controller
 
     //<-------基礎課題３ 08 step4--------->
     public function updateTeamData (Request $request, Team $team) {
-        $postData = $request->only(['id', 'name', 'explain', 'genre', 'fee', 'rank']);
+        $postData = $request->only(['name', 'explain', 'genre', 'fee', 'rank']);
         $postId = $request->input('id');
 
         try {
-            $updatedData = $team->updateTeamDataModel($postData, $postId);
+            $updatedData = $team->updateTeam($postData, $postId);
+            Log::info('controllerでの編集成功');
             return $updatedData;
 
         } catch (\Exception $e){
@@ -105,8 +107,8 @@ class TeamController extends Controller
         $requestId = $request->input('id');
 
         try {
-            $deleteData = $team->deleteTeamDataModel($requestId);
-            Log::emergency($requestId);
+            $deleteData = $team->deleteTeam($requestId);
+            Log::info('controllerでの削除成功');
             return '成功' . $deleteData;
 
         } catch (\Exception $e){
