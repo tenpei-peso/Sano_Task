@@ -2,10 +2,6 @@
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
-<<<<<<< HEAD
-
-=======
->>>>>>> 8ae0fcd2318ddb657945b7ad7389d9670ab1afd9
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\GameController;
 
