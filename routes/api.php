@@ -25,8 +25,6 @@ Route::post('/update_member_data', [MemberController::class, 'updateMemberData']
 Route::post('/delete_member_data', [MemberController::class, 'deleteMemberData']);
 //<----------基礎課題3-------->
 
-
-//<----------テスト1-------->
 Route::get('/team_list/{id?}', [TeamController::class, 'showTeams']); 
 
 Route::get('/team_list/{genre?}', [TeamController::class, 'selectedShowTeams']); //chap7
@@ -39,6 +37,9 @@ Route::get('/get_team_member_data', [TeamController::class, 'getTeamMemberData']
 //<----------リレーション-------->
 
 Route::post('/search_members', [MemberController::class, 'searchMembers']);
+
+//Laravel課題3
+Route::get('/practice_list/{time?}', [PracticeController::class, 'getPracticeData']); 
 
 //Laravel課題3
 Route::get('/practice_list/{time?}', [PracticeController::class, 'getPracticeData']); 

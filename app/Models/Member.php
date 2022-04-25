@@ -202,7 +202,6 @@ class Member extends Model
 
             Log::info('削除に成功:'. $deleteMemberDataModel);
             Log::info(json_encode($id, JSON_UNESCAPED_UNICODE));
-
             return $deleteMemberDataModel;
             
         } catch (\Exception $e){

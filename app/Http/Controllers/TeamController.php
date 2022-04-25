@@ -14,8 +14,7 @@ class TeamController extends Controller
         try {
             $getTeams = $team->getTeams($id);
         // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
-        return $getTeams;
-
+            return $getTeams;
         } catch (\Exception $e){
             Log::emergency($e->getMessage());
             return $e;
