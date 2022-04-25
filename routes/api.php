@@ -2,12 +2,10 @@
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\PracticeController;
-=======
 use App\Http\Controllers\GameController;
 
->>>>>>> 1ded439afdf7908a072fd03ae7a6d7a2a4b898cc
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
