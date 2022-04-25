@@ -6,7 +6,7 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\PostRequest;
-
+use Illuminate\Support\Facades\DB;
 
 
 class MemberController extends Controller
@@ -167,6 +167,64 @@ class MemberController extends Controller
 
         } catch (\Exception $e){
             Log::emergency('request内容: . $minAgeData . $maxAgeData');
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step1 && 09 step1--------->
+    public function createMemberData (Request $request, Member $member) {
+        $postData = $request->only(['name', 'age', 'area', 'leader', 'comment', 'gender',]);
+        try {
+            DB::beginTransaction();
+            //member作成
+            $createdData = $member->createMember($postData);
+            $memberDataId = $createdData->id;
+
+            //teamsMembers作成
+            $createTeamMemberData = $member->createTeamMember($memberDataId);
+            DB::commit();
+            Log::info('トランジション成功');
+            return $createTeamMemberData;
+
+        } catch (\Exception $e){
+            DB::rollBack();
+            Log::emergency('データ作成に失敗:' . $postData);
+            Log::emergency('データ作成に失敗:' . $memberDataId);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step2--------->
+    public function updateMemberData (Request $request, Member $member) {
+        $postData = $request->only(['name', 'age', 'area', 'leader', 'comment', 'gender',]);
+        $postId = $request->input('id');
+
+        try {
+            $updatedData = $member->updateMember($postData, $postId);
+            Log::info('controllerアップデート成功');
+            return $updatedData;
+
+        } catch (\Exception $e){
+            Log::emergency('失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step3--------->
+    public function deleteMemberData (Request $request, Member $member) {
+        $requestId = $request->input('id');
+
+        try {
+            $deleteData = $member->deleteMember($requestId);
+            Log::info('controller削除成功');
+            return '成功' . $deleteData;
+
+        } catch (\Exception $e){
+            Log::emergency($requestId);
+            Log::emergency('失敗');
             Log::emergency($e->getMessage());
             return $e;
         }
