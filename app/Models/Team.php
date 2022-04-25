@@ -4,29 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Team extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'explain',
-        'genre',
-        'fee',
-        'rank',
+    protected $guarded = [
+        'id',
     ];
+    public $timestamps = false;
+
 
     //<-------02 step1---------->
     //<---------laravel3課題 発展４----------->
@@ -90,6 +81,7 @@ class Team extends Model
             throw $e;
         }
     }
+
     // <----------リレーション------------------>
 
     public function rank() {
@@ -126,6 +118,55 @@ class Team extends Model
     public function getTeamsMembers(){
         $teams = $this->where('id', 1)->with('members')->get();
         return $teams;
+    }
+
+     //<-------基礎課題３ 08 step4--------->
+    public function createTeam ($postData) {
+        try {
+            $createdDataModel = $this->create($postData);
+            Log::info('データ作成に成功:'. $createdDataModel);
+            return $createdDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('データ作成に失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+     //<-------基礎課題３ 08 step4--------->
+    public function updateTeam ($postData, $postId) {
+        try {
+            $updatedTeamDataModel = $this->where('id', $postId)->update($postData);
+
+            Log::info('アップデートに成功:'. $updatedTeamDataModel);
+            Log::info(json_encode($postData, JSON_UNESCAPED_UNICODE));
+            Log::info(json_encode($postId, JSON_UNESCAPED_UNICODE));
+
+            return $updatedTeamDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('アップデートに失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+     //<-------基礎課題３ 08 step4--------->
+    public function deleteTeam ($id) {
+        try {
+            $deleteTeamDataModel = $this->where('id', $id)->delete();
+
+            Log::info('削除に成功:'. $deleteTeamDataModel);
+            Log::info(json_encode($id, JSON_UNESCAPED_UNICODE));
+
+            return $deleteTeamDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('削除に失敗:');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
 
 }

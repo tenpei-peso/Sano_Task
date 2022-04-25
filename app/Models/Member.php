@@ -17,20 +17,11 @@ class Member extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'age',
-        'area',
-        'leader',
-        'comment',
-        'gender'
+    protected $guarded = [
+        'id',
     ];
 
+    public $timestamps = false;
     
     public function getIdUser(){
         try {
@@ -87,6 +78,17 @@ class Member extends Model
         }
     }
 
+//<-----------リレーション------------>
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'teams_members', 'member_id', 'team_id');
+    }
+
+    public function practices()
+    {
+        return $this->belongsToMany(Practice::class);
+    }
+
     // <----------リレーション02 step2------------------>
 
     public function getTeamMember($id) {
@@ -139,10 +141,76 @@ class Member extends Model
             throw $e;
         }
     }
-//<-----------リレーション------------>
-    public function practices()
-    {
-        return $this->belongsToMany(Practice::class);
+    //<-------基礎課題３ 08 step1--------->
+    public function createMember ($postData) {
+        try {
+            //member作成
+            $createdDataModel = $this->create($postData);
+
+            Log::info(json_encode('member作成に成功:'. $createdDataModel, JSON_UNESCAPED_UNICODE));
+
+            return $createdDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('member作成に失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+    //<-------基礎課題３ 09 step1--------->
+    public function createTeamMember ($memberDataId) {
+        try {
+            //ランダムなチームidを作る
+            $randNumber = rand(1, 30);
+
+            //teamsMembers作成
+            $createdTeamMembersModel = DB::table('teams_members')->insert([
+                'team_id' => $memberDataId-$randNumber,
+                'member_id' => $memberDataId
+            ]);
+
+            Log::info(json_encode('teamMember作成に成功:'. $createdTeamMembersModel, JSON_UNESCAPED_UNICODE));
+
+            return $createdTeamMembersModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('table_member作成に失敗:' . $memberDataId);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
     }
 
+     //<-------基礎課題３ 08 step2--------->
+    public function updateMember ($postData, $postId) {
+        try {
+            $updatedMemberDataModel = $this->where('id', $postId)->update($postData);
+
+            Log::info('アップデートに成功:'. $updatedMemberDataModel);
+            Log::info(json_encode($postData, JSON_UNESCAPED_UNICODE));
+            Log::info(json_encode($postId, JSON_UNESCAPED_UNICODE));
+
+            return $updatedMemberDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('アップデートに失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+     //<-------基礎課題３ 08 step3--------->
+    public function deleteMember ($id) {
+        try {
+            $deleteMemberDataModel = $this->where('id', $id)->delete();
+
+            Log::info('削除に成功:'. $deleteMemberDataModel);
+            Log::info(json_encode($id, JSON_UNESCAPED_UNICODE));
+            return $deleteMemberDataModel;
+            
+        } catch (\Exception $e){
+            Log::emergency('削除に失敗:');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 }

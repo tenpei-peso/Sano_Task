@@ -14,9 +14,7 @@ class TeamController extends Controller
         try {
             $getTeams = $team->getTeams($id);
         // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
-
-        return $getTeams;
-            
+            return $getTeams;
         } catch (\Exception $e){
             Log::emergency($e->getMessage());
             return $e;
@@ -54,6 +52,68 @@ class TeamController extends Controller
             Log::emergency('request1: . $minFeeData');
             Log::emergency('request2: . $maxFeeData');
             Log::emergency('request3: . $genreData');
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<--------リレーション02 step4--------->
+    public function getTeamMemberData(Team $team) {
+        try{
+            $getData = $team->getTeamsMembers();
+            Log::info('デート取得成功' . $getData);
+            return $getData;
+        } catch(\Exception $e) {
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+    //<--------リレーション02 step4--------->
+
+    //<-------基礎課題３ 08 step4--------->
+    public function createTeamData (Request $request, Team $team) {
+        $postData = $request->only(['name', 'explain', 'genre', 'fee', 'rank',]);
+        try {
+            $createdData = $team->createTeam($postData);
+            Log::info('controllerでの作成成功');
+            return $createdData;
+
+        } catch (\Exception $e){
+            Log::emergency($postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step4--------->
+    public function updateTeamData (Request $request, Team $team) {
+        $postData = $request->only(['name', 'explain', 'genre', 'fee', 'rank']);
+        $postId = $request->input('id');
+
+        try {
+            $updatedData = $team->updateTeam($postData, $postId);
+            Log::info('controllerでの編集成功');
+            return $updatedData;
+
+        } catch (\Exception $e){
+            Log::emergency('失敗:' . $postData);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
+
+    //<-------基礎課題３ 08 step4--------->
+    public function deleteTeamData (Request $request, Team $team) {
+        $requestId = $request->input('id');
+
+        try {
+            $deleteData = $team->deleteTeam($requestId);
+            Log::info('controllerでの削除成功');
+            return '成功' . $deleteData;
+
+        } catch (\Exception $e){
+            Log::emergency($requestId);
+            Log::emergency('失敗');
             Log::emergency($e->getMessage());
             return $e;
         }
