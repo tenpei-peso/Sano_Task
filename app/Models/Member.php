@@ -22,7 +22,6 @@ class Member extends Model
     ];
 
     public $timestamps = false;
-
     
     public function getIdUser(){
         try {
@@ -79,9 +78,15 @@ class Member extends Model
         }
     }
 
+//<-----------リレーション------------>
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'teams_members', 'member_id', 'team_id');
+    }
+
+    public function practices()
+    {
+        return $this->belongsToMany(Practice::class);
     }
 
     // <----------リレーション02 step2------------------>
@@ -206,5 +211,4 @@ class Member extends Model
             throw $e;
         }
     }
-
 }

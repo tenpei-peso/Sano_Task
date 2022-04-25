@@ -20,11 +20,20 @@ class Team extends Model
 
 
     //<-------02 step1---------->
-    public function getAllTeams(){
+    //<---------laravel3課題 発展４----------->
+    public function getTeams($id){
+        $query = $this->query();
+
         try {
-            $teams = $this->all();
+            if($id != null) {
+                $query->where('id', $id);
+            }
+    
+            $teams = $query->with('practice.members')->get();
             return $teams;
+
         } catch (\Exception $e){
+            Log::emergency('idの内容: . $id');
             Log::emergency($e->getMessage());
             throw $e;
         }
@@ -87,6 +96,12 @@ class Team extends Model
     {
         return $this->belongsToMany(Member::class, 'teams_members', 'team_id', 'member_id');
     }
+
+    public function practice()
+    {
+        return $this->hasMany(Practice::class);
+    }
+
     // <----------リレーション------------------>
 
         //relation <-------01 step2---------->
@@ -153,4 +168,5 @@ class Team extends Model
             throw $e;
         }
     }
+
 }

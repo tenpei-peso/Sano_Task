@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
-    public function showTeams (Team $team) {
+    public function showTeams (Team $team, $id) {
         //<-------02 step1---------->
         try {
-            $getTeams = $team->getAllTeams();
-            // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
-            return $getTeams;
-            
+            $getTeams = $team->getTeams($id);
+        // Log::info(json_encode($getTeams, JSON_UNESCAPED_UNICODE));
+        return $getTeams;
+
         } catch (\Exception $e){
             Log::emergency($e->getMessage());
             return $e;

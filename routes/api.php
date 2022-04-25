@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\GameController;
 
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ Route::post('/delete_member_data', [MemberController::class, 'deleteMemberData']
 
 
 //<----------テスト1-------->
-Route::get('/team_list', [TeamController::class, 'showTeams']); 
+Route::get('/team_list/{id?}', [TeamController::class, 'showTeams']); 
 
 Route::get('/team_list/{genre?}', [TeamController::class, 'selectedShowTeams']); //chap7
 
@@ -36,6 +37,11 @@ Route::post('/select_teams', [TeamController::class, 'searchTeam']);
 //<----------リレーション-------->
 Route::get('/get_team_member_data', [TeamController::class, 'getTeamMemberData']); 
 //<----------リレーション-------->
+
+Route::post('/search_members', [MemberController::class, 'searchMembers']);
+
+//Laravel課題3
+Route::get('/practice_list/{time?}', [PracticeController::class, 'getPracticeData']); 
 
 //<----------基礎課題3-------->
 Route::post('/create_team_data', [TeamController::class, 'createTeamData']);
