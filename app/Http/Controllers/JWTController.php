@@ -81,7 +81,7 @@ class JWTController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'User successfully logged out.']);
+        return response()->json(['message' => 'ログアウトしました']);
     }
 
     /**
