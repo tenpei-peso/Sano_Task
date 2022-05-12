@@ -71,3 +71,4 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function($router) {
 
 Route::get('/blog_list/{id?}', [BlogController::class, 'getBlogListData']);
 Route::get('/blog_user', [BlogController::class, 'getBlogUserData']);
+Route::get('/blog_category', [BlogController::class, 'getBlogCategoryData']);

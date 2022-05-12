@@ -30,4 +30,15 @@ class BlogController extends Controller
             throw $e;
         }
     }
+
+    public function getBlogCategoryData (Blog $blog) {
+        try {
+            $categoryData = $blog->getBlogCategoryData();
+            return $categoryData;
+        } catch(\Exception $e) {
+            Log::info('Controllerで取得できませんでした');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 }

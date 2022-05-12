@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\Blog;
 use App\Models\User;
 use Database\Seeders\BlogSeeder;
+use Database\Seeders\SecondCategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -34,5 +35,14 @@ class BlogControllerTest extends TestCase
         $userData = Blog::find(1)->user->name;
 
         $this->getJson('api/blog_user')->assertOk()->assertJsonFragment([$userData]);
+    }
+
+    /** @test */
+    function ブログのカテゴリー表示() {
+        $this->seed(BlogSeeder::class);
+        $this->seed(SecondCategorySeeder::class);
+
+        $categoryData = Blog::find(1)->second_category->name;
+        $this->getJson('api/blog_category')->assertOk()->assertJsonFragment([$categoryData]);
     }
 }

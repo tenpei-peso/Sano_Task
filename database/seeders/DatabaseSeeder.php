@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             member_practiceSeeder::class,
             GameSeeder::class,
             BlogSeeder::class,
+            SecondCategorySeeder::class,
         ]);
     }
 }
