@@ -6,6 +6,7 @@ use App\Http\Requests\Blog\CreateBlogRequest;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
@@ -51,14 +52,23 @@ class BlogController extends Controller
 
     public function blogCreate (Blog $blog, CreateBlogRequest $request) {
         $postData = $request->only(['second_category_id', 'title', 'price', 'content']);
+        $input_tag = $request->input('tag');
         $user_id = Auth::id();
 
         try {
-            $createData = $blog->blogCreate($postData, $user_id);
-            Log::info('作成したデータ'. $createData);
+            DB::beginTransaction();
+            //blogとtagを同時に作成
+            $createData = $blog->blogCreate($postData, $user_id); //ブログ作成
+            Log::info('ブログ作成できた'. $createData);
+
+            $createTag = $blog->tagCreate($createData, $input_tag); //タグ作成
+            Log::info('タグ作成できた'. $createTag);
+
+            DB::commit();
             return '作成できました';
 
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::info('Controllerで取得できませんでした');
             Log::emergency($e->getMessage());
             throw $e;

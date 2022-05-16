@@ -83,6 +83,22 @@ class Blog extends Model
         }
     }
 
+    public function tagCreate ($createData, $input_tag) {
+        if (isset($input_tag)) {
+            $tag_ids = [];
+            $tags = explode('#', $input_tag);
+            foreach ($tags as $tag) {
+                $tag = Tag::updateOrCreate(
+                    [
+                        'tag' => $tag,
+                    ]
+                );
+                $tag_ids[] = $tag->id;
+            }
+            $createData->tags()->sync($tag_ids);
+        }
+    }
+
     public function findWhoBlog ($blogId) {
         try {
             $userData = $this->find($blogId)->user;
