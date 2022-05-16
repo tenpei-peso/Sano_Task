@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             GameSeeder::class,
             BlogSeeder::class,
             SecondCategorySeeder::class,
+            TagSeeder::class,
+            Blog_tagSeeder::class,
         ]);
     }
 }

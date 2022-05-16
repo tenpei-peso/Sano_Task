@@ -21,6 +21,10 @@ class Blog extends Model
     public function second_category () {
         return $this->belongsTo(SecondCategory::class);
     }
+
+    public function tags () {
+        return $this->belongsToMany(Tag::class);
+    }
     //---------リレーションーーーーーー
 
     public function getBlogListData ($id) {
