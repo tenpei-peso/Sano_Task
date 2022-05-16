@@ -9,6 +9,7 @@ use Database\Seeders\SecondCategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BlogControllerTest extends TestCase
 {
@@ -44,5 +45,129 @@ class BlogControllerTest extends TestCase
 
         $categoryData = Blog::find(1)->second_category->name;
         $this->getJson('api/blog_category')->assertOk()->assertJsonFragment([$categoryData]);
+    }
+
+    /** @test */
+    function ブログを新規登録できる() {
+        $user = User::factory()->create();
+        
+        $postData = [
+            'user_id' => $user->id,
+            'second_category_id' => 2,
+            'title' => 'えいぶんについて',
+            'price' => 1500,
+            'content' => 'めっちゃいい説明',
+        ];
+
+        $blogCreate = $this->withHeaders(['Authorization' => 'Bearer ' . JWTAuth::fromUser($user)])->postJson('api/create_blog', $postData);
+        $blogCreate->assertOk();
+
+        $this->assertDatabaseHas('blogs', ['title' => 'えいぶんについて']); //テーブルに先ほど登録した値があるかチェック
+    }
+
+    /** @test */
+    function 自分のブログは編集できる() {
+        //コントローラーでログインしているユーザーとブログを作成したユーザーが一致しないとエラーを出す様にしている。
+        //$userのidと$blogの'user_id'が一致している
+        $user = User::factory()->create();
+
+        //ブログのダミーデータ作成
+        $blog = Blog::create([
+            'user_id' => 1,
+            'second_category_id' => 1,
+            'title' => "テスト",
+            'price' => 5555,
+            'content' => 'ブログの内容です',
+        ]);
+
+        //編集のデータ
+        $postData = [
+            'id' => 1,
+            'user_id' => 2,
+            'second_category_id' => 2,
+            'title' => 'えいぶんについて',
+            'price' => 1500,
+            'content' => 'めっちゃいい説明',
+        ];
+        $blogUpdate =$this->withHeaders(['Authorization' => 'Bearer ' . JWTAuth::fromUser($user)])->postJson('api/update_blog/'. $blog->id, $postData);
+        $blogUpdate->assertOk();
+        $this->assertDatabaseHas('blogs', ['title' => 'えいぶんについて']);
+        $this->assertCount(1, Blog::all()); //新規に追加されていないかチェック
+    }
+
+    /** @test */
+    function 他人のブログは編集できない() {
+        //コントローラーでログインしているユーザーとブログを作成したユーザーが一致しないとエラーを出す様にしている。
+        //$userのidと$blogの'user_id'が一致していない
+        $user = User::factory()->create();
+
+        //ブログのダミーデータ作成
+        $blog = Blog::create([
+            'id' => 1,
+            'user_id' => 3,
+            'second_category_id' => 1,
+            'title' => "テスト",
+            'price' => 5555,
+            'content' => 'ブログの内容です',
+        ]);
+
+        //編集のデータ
+        $postData = [
+            'user_id' => 2,
+            'second_category_id' => 2,
+            'title' => 'えいぶんについて',
+            'price' => 1500,
+            'content' => 'めっちゃいい説明',
+        ];
+        $blogUpdate =$this->withHeaders(['Authorization' => 'Bearer ' . JWTAuth::fromUser($user)])->postJson('api/update_blog/'. $blog->id, $postData);
+        $blogUpdate->assertStatus(404);
+    }
+
+    /** @test */
+    function 自分のブログは削除できる() {
+        //コントローラーでログインしているユーザーとブログを作成したユーザーが一致しないとエラーを出す様にしている。
+        //$userのidと$blogの'user_id'が一致している
+        $user = User::factory()->create();
+
+        //ブログのダミーデータ作成
+        $blog = Blog::create([
+            'user_id' => 1,
+            'second_category_id' => 1,
+            'title' => "テスト",
+            'price' => 5555,
+            'content' => 'ブログの内容です',
+        ]);
+
+        //編集のデータ
+        $postData = [
+            'id' => 1
+        ];
+        $blogUpdate =$this->withHeaders(['Authorization' => 'Bearer ' . JWTAuth::fromUser($user)])->postJson('api/delete_blog/'. $blog->id, $postData);
+        $blogUpdate->assertOk();
+        $this->assertCount(0, Blog::all()); //消えてるかチェック
+    }
+
+    /** @test */
+    function 自分のブログは削除できない() {
+        //コントローラーでログインしているユーザーとブログを作成したユーザーが一致しないとエラーを出す様にしている。
+        //$userのidと$blogの'user_id'が一致している
+        $user = User::factory()->create();
+
+        //ブログのダミーデータ作成
+        $blog = Blog::create([
+            'user_id' => 3,
+            'second_category_id' => 1,
+            'title' => "テスト",
+            'price' => 5555,
+            'content' => 'ブログの内容です',
+        ]);
+
+        //編集のデータ
+        $postData = [
+            'id' => 1
+        ];
+        $blogUpdate =$this->withHeaders(['Authorization' => 'Bearer ' . JWTAuth::fromUser($user)])->postJson('api/delete_blog/'. $blog->id, $postData);
+        $blogUpdate->assertOk();
+        $this->assertCount(0, Blog::all()); //消えてるかチェック
     }
 }

@@ -26,7 +26,6 @@ class CreateBlogRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'integer'], //入力必須、文字列、最大255
             'second_category_id' => ['required', 'integer'],
             'title' => ['required', 'string', 'max:20'],
             'price' => ['required', 'integer'],
@@ -37,7 +36,6 @@ class CreateBlogRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_id.required' => 'user_idを入力してください。', 
             'second_category_id.required' => 'second_category_idを入力してください。', 
             'title.required' => 'タイトルを入力してください。', 
             'title.string' => '正しく入力してください', 

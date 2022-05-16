@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->integer('price');
             $table->longText('content');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
