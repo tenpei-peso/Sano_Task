@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->string('gender')->nullable(true)->comment('性別');
-        });
+        // Schema::table('members', function (Blueprint $table) {
+        //     $table->string('gender')->nullable(true)->comment('性別');
+        // });
     }
 
     /**
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn('gender');
+            // $table->dropColumn('gender');
         });
     }
 };

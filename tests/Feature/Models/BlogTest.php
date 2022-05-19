@@ -12,16 +12,25 @@ use Database\Seeders\SecondCategorySeeder;
 use Database\Seeders\TagSeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BlogTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->seed(BlogSeeder::class);
+        $this->seed(SecondCategorySeeder::class);
+        $this->seed(TagSeeder::class);
+    }
+
 
     /** @test */
     function userリレーション() {
-        $this->seed(BlogSeeder::class);
         User::factory()->create();
 
         $user = Blog::find(1)->user;
@@ -30,20 +39,12 @@ class BlogTest extends TestCase
 
     /** @test */
     function second_categoryリレーション() {
-        $this->seed(BlogSeeder::class);
-        $this->seed(SecondCategorySeeder::class);
-
         $user = Blog::find(1)->second_category;
-        dump($user);
         $this->assertInstanceOf(SecondCategory::class, $user);
     }
 
     /** @test */
     function blog_tagリレーション() {
-        $this->seed(BlogSeeder::class);
-        $this->seed(TagSeeder::class);
-        $this->seed(Blog_tagSeeder::class);
-        
         $tag = Blog::find(1)->tags;
         $this->assertInstanceOf(Collection::class, $tag);
     }
