@@ -21,7 +21,11 @@ class DatabaseSeeder extends Seeder
             TeamsMembersSeeder::class,
             PracticeSeeder::class,
             member_practiceSeeder::class,
-            GameSeeder::class
+            GameSeeder::class,
+            BlogSeeder::class,
+            SecondCategorySeeder::class,
+            TagSeeder::class,
+            Blog_tagSeeder::class,
         ]);
     }
 }

@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::table('members', function (Blueprint $table) {
-        //     $table->string('gender')->nullable(true)->comment('性別');
-        // });
+        Schema::create('second_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('members', function (Blueprint $table) {
-            // $table->dropColumn('gender');
-        });
+        Schema::dropIfExists('second_categories');
     }
 };

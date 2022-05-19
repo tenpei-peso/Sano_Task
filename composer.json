@@ -10,6 +10,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
+        "laravel/slack-notification-channel": "^2.4",
         "laravel/tinker": "^2.7"
     },
     "require-dev": {
@@ -18,7 +19,8 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^1.0",
+        "tymon/jwt-auth": "dev-develop"
     },
     "autoload": {
         "psr-4": {
