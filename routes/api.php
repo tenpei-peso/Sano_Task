@@ -80,4 +80,3 @@ Route::post('/update_blog/{blogId}', [BlogController::class, 'blogUpdate']);
 Route::post('/delete_blog/{blogId}', [BlogController::class, 'blogDelete']);
 Route::post('/search_tag', [BlogController::class, 'searchTagName']);
 
-

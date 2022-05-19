@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "b49b89f201e64ea4a695aa8b666c6de0",
+
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
