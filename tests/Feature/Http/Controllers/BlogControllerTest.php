@@ -148,7 +148,7 @@ class BlogControllerTest extends TestCase
     }
 
     /** @test */
-    function 自分のブログは削除できない() {
+    function 他人のブログは削除できない() {
         //コントローラーでログインしているユーザーとブログを作成したユーザーが一致しないとエラーを出す様にしている。
         //$userのidと$blogの'user_id'が一致している
         $user = User::factory()->create();

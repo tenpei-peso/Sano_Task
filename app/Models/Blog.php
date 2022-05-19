@@ -139,5 +139,39 @@ class Blog extends Model
         }
     }
 
+    public function searchTagName ($keyword) {
+        try {
+            $query = Blog::query();
+            $searchedData = Blog::whereHas('tags', function ($query) use ($keyword) {
+                $query->where('tag', 'LIKE', "%{$keyword}%");
+                })->get();
+
+            Log::info('検索成功 :'. $searchedData);
+            return $searchedData;
+
+        } catch (\Exception $e) {
+            Log::info('Modelで取得できませんでした');
+            Log::info($keyword);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function searchBlogCategory ($category) {
+        try {
+            $categoryData = Blog::whereHas('second_category', function ($query) use ($category) {
+                $query->where('name', 'LIKE', "%{$category}%");
+                })->get();
+            
+            Log::info('カテゴリー検索' . $categoryData);
+            return $categoryData;
+        } catch (\Exception $e) {
+            Log::info('Modelで取得できませんでした');
+            Log::info($category);
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
 
 }

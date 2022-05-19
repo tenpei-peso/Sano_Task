@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use function PHPUnit\Framework\isEmpty;
+
 class BlogController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['getBlogListData', 'getBlogUserData', 'getBlogCategoryData']]);
+        $this->middleware('auth:api', ['except' => ['getBlogListData', 'getBlogUserData', 'getBlogCategoryData', 'searchTagName', 'searchBlogCategory']]);
     }
 
     public function getBlogListData (Blog $blog, $id = null) {
@@ -97,7 +99,7 @@ class BlogController extends Controller
         }
     }
 
-    public function blogDelete (Blog $blog, Request $request ,$blogId) {
+    public function blogDelete (Blog $blog, Request $request, $blogId) {
         //そのブログの持ち主でないと編集できない。
         $findWhoBlog = $blog->findWhoBlog($blogId);
         if(Auth::user()->isNot($findWhoBlog)) {
@@ -117,4 +119,37 @@ class BlogController extends Controller
             throw $e;
         }
     }
+
+    public function searchTagName (Blog $blog, Request $request) {
+        $keyword = $request->input("keyword");
+
+        try {
+            $searchedData = $blog->searchTagName($keyword);
+
+            if (isEmpty($searchedData)) {
+                return 'blogがありません';
+            }
+
+            Log::info('検索成功 :'. $searchedData);
+            return $searchedData;
+        } catch(\Exception $e) {
+            Log::info('Controllerで取得できませんでした');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function searchBlogCategory (Blog $blog, $category) {
+        try {
+            $categoryData = $blog->searchBlogCategory($category);
+
+            Log::info('検索成功 :'. $categoryData);
+            return $categoryData;
+        } catch(\Exception $e) {
+            Log::info('Controllerで取得できませんでした');
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
 }
