@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Blog\CreateBlogRequest;
 use App\Models\Blog;
+use App\Notifications\SendSlack;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +16,8 @@ use function PHPUnit\Framework\isEmpty;
 
 class BlogController extends Controller
 {
+    use Notifiable;
+
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['getBlogListData', 'getBlogUserData', 'getBlogCategoryData', 'searchTagName', 'searchBlogCategory']]);
@@ -55,6 +60,7 @@ class BlogController extends Controller
     public function blogCreate (Blog $blog, CreateBlogRequest $request) {
         $postData = $request->only(['second_category_id', 'title', 'price', 'content']);
         $input_tag = $request->input('tag');
+        $title = $request->input('title');
         $user_id = Auth::id();
 
         try {
@@ -66,12 +72,17 @@ class BlogController extends Controller
             $createTag = $blog->tagCreate($createData, $input_tag); //タグ作成
             Log::info('タグ作成できた'. $createTag);
 
+            //slack通知
+            $slack = $this->notify(new SendSlack($title));
+            Log::info('slack通知できた');
+
             DB::commit();
             return '作成できました';
 
         } catch (\Exception $e) {
             DB::rollBack();
             Log::info('Controllerで取得できませんでした');
+            Log::emergency("transactionが失敗しました");
             Log::emergency($e->getMessage());
             throw $e;
         }
@@ -150,6 +161,11 @@ class BlogController extends Controller
             Log::emergency($e->getMessage());
             throw $e;
         }
+    }
+
+    public function routeNotificationForSlack($notification)
+    {
+        return config('app.slack_url');
     }
 
 }
