@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PracticeController;
@@ -57,3 +58,6 @@ Route::get('/game_list', [GameController::class, 'getGameListData']);
 
 Route::post('/game_search_list', [GameController::class, 'searchGameData']);
 //<----------テスト2-------->
+
+//<---------nisiokaMadeTask---------->
+Route::get('/article_list', [ArticleController::class, 'articleListData']);
