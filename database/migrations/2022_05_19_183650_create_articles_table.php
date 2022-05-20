@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('account_id');
             $table->longText('content');
             $table->integer('study_time');
             $table->string('genre');

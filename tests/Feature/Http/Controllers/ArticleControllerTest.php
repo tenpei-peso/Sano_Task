@@ -17,7 +17,7 @@ class ArticleControllerTest extends TestCase
         $article = Article::factory()->create();
 
         $postData = [
-            'user_id' => 3,
+            'account_id' => 3,
             'study_time' => 2,
             'genre' => 'php',
             'content' => 'めっちゃいい記自',
@@ -34,7 +34,7 @@ class ArticleControllerTest extends TestCase
 
         $postData = [
             'id' => 3,
-            'user_id' => 3,
+            'account_id' => 3,
             'study_time' => 2,
             'genre' => 'php',
             'content' => 'コーヒー牛乳すこ',

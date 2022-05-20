@@ -24,7 +24,7 @@ class ArticleFactory extends Factory
         $script = ['PHP', 'Ruby', 'Python', 'Javascript', 'その他の言語'];
 
         return [
-            'user_id' => User::factory(),
+            'account_id' => User::factory(),
             'content' => $this->faker->realText(140),
             'study_time' => rand(1, 24),
             'genre' => Arr::random($script),
