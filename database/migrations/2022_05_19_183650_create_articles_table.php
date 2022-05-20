@@ -19,6 +19,7 @@ return new class extends Migration
             $table->longText('content');
             $table->integer('study_time');
             $table->string('genre');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

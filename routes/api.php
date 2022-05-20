@@ -61,3 +61,7 @@ Route::post('/game_search_list', [GameController::class, 'searchGameData']);
 
 //<---------nisiokaMadeTask---------->
 Route::get('/article_list', [ArticleController::class, 'articleListData']);
+
+Route::post('/create_article_data', [ArticleController::class, 'createArticleData']);
+Route::post('/update_article_data', [ArticleController::class, 'updateArticleData']);
+Route::post('/delete_article_data', [ArticleController::class, 'deleteArticleData']);
