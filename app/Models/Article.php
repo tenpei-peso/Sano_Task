@@ -13,6 +13,16 @@ class Article extends Model
 
     protected $guarded = [];
 
+    //リレーション
+    public function account () {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function likes () {
+        return $this->hasMany(Likes::class);
+    }
+    //リレーション
+
     public function articleListData () {
         try {
             $article = $this->all();

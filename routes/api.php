@@ -6,8 +6,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\GameController;
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\LikesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/member_list/{area?}', [MemberController::class, 'showMemberList']);
@@ -67,3 +66,6 @@ Route::get('/account_list', [AccountController::class, 'accountListData']);
 Route::post('/create_article_data', [ArticleController::class, 'createArticleData']);
 Route::post('/update_article_data', [ArticleController::class, 'updateArticleData']);
 Route::post('/delete_article_data', [ArticleController::class, 'deleteArticleData']);
+
+Route::post('/like', [LikesController::class, 'like']);
+
