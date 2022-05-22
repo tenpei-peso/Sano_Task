@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
@@ -61,6 +62,7 @@ Route::post('/game_search_list', [GameController::class, 'searchGameData']);
 
 //<---------nisiokaMadeTask---------->
 Route::get('/article_list', [ArticleController::class, 'articleListData']);
+Route::get('/account_list', [AccountController::class, 'accountListData']);
 
 Route::post('/create_article_data', [ArticleController::class, 'createArticleData']);
 Route::post('/update_article_data', [ArticleController::class, 'updateArticleData']);
