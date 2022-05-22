@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,10 +15,10 @@ class ArticleControllerTest extends TestCase
     
     /** @test */
     function ブログが新規登録できる() {
-        $article = Article::factory()->create();
+        $article = Account::factory()->create();
 
         $postData = [
-            'account_id' => 3,
+            'account_id' => 1,
             'study_time' => 2,
             'genre' => 'php',
             'content' => 'めっちゃいい記自',
@@ -31,9 +32,10 @@ class ArticleControllerTest extends TestCase
     /** @test */
     function ブログが編集できる() {
         $article = Article::factory()->create();
+        dump($article->id);
 
         $postData = [
-            'id' => 3,
+            'id' => 2,
             'account_id' => 3,
             'study_time' => 2,
             'genre' => 'php',
@@ -52,7 +54,7 @@ class ArticleControllerTest extends TestCase
         $article = Article::factory()->create();
         dump($article);
         $postData = [
-            'id' => 4
+            'id' => 3
         ];
 
         $this->postJson('api/delete_article_data', $postData)->assertOk();
