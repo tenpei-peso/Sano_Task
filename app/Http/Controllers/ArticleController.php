@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Artisan\ArtisanRequest;
+use App\Models\Account;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
@@ -22,16 +24,35 @@ class ArticleController extends Controller
     }
 
     //記事作成
-    public function createArticleData (Article $article, ArtisanRequest $request) {
+    public function createArticleData (Article $article, Account $account ,ArtisanRequest $request) {
         $postData = $request->only(['account_id', 'content', 'study_time', 'genre']);
+        $accountId = $request->input('account_id');
+        $accountName = $request->input('name');
+        $accountEmail = $request->input('email');
+        $accountPassword = $request->input('password');
 
         try {
+            DB::beginTransaction();
+            //account_idからアカウントが存在しているか確認
+            $accountData = $account->searchAccount($accountId);
+            
+            //アカウント登録をしていないアカウントが記事を登録しようとしたら、アカウントの登録
+            if($accountData->isEmpty()) {
+                $account->createAccount($accountId ,$accountName, $accountEmail, $accountPassword);
+                Log::info('アカウントが作成されました');
+            } else {
+                Log::info('アカウントが存在しています');
+            }
+
+            //記事作成
             $createdData = $article->createArticleData($postData);
-            Log::info($createdData);
+            DB::commit();
+            Log::info('トランザクション成功');
             return '新規作成されました';
 
         } catch (\Exception $e){
-            Log::emergency('postした値 :' . $postData);
+            DB::rollBack();
+            Log::emergency('トランザクション失敗');
             Log::emergency($e->getMessage());
             return $e;
         }
