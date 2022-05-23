@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Staff\StaffRequest;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class StaffController extends Controller
     }
 
     //staff新規作成
-    public function staffCreate (Staff $staff, Request $request) {
+    public function staffCreate (Staff $staff, StaffRequest $request) {
         $postData = $request->only(['name', 'grade', 'gender', 'part']);
 
         try {
@@ -46,7 +47,7 @@ class StaffController extends Controller
     }
 
     //staffアップデート
-    public function staffUpdate (Staff $staff, Request $request) {
+    public function staffUpdate (Staff $staff, StaffRequest $request) {
         $postData = $request->only(['name', 'grade', 'gender', 'part']);
         $id = $request->input('id');
         $band_id = $request->input('band_id');
