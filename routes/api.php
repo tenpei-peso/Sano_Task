@@ -63,3 +63,11 @@ Route::post('/game_search_list', [GameController::class, 'searchGameData']);
 Route::get('/band_list_with_staff', [BandController::class, 'bandWithStaff']);
 Route::get('/staff_list_with_band', [StaffController::class, 'staffWithBand']);
 
+Route::post('/staff_create', [StaffController::class, 'staffCreate']);
+Route::post('/staff_update', [StaffController::class, 'staffUpdate']);
+Route::post('/staff_delete', [StaffController::class, 'staffDelete']);
+
+Route::post('/band_create', [BandController::class, 'bandCreate']);
+
+
+

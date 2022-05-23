@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('grade');
             $table->string('gender');
             $table->string('part');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -31,4 +31,30 @@ class Band extends Model
             throw $e;
         }
     }
+
+    //band新規作成
+    public function bandCreate ($postData) {
+        try {
+            $bandData = $this->create($postData);
+            return $bandData;
+
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function addMiddleTable ($bandId) {
+        try {
+            $bandData = $this->find($bandId);
+            //バンドの数取得
+            $bandCount = Band::count();
+            $bandSyncData = $bandData->staffs()->sync(rand(1, $bandCount));
+            return $bandSyncData;
+
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
 }
