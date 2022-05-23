@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Artisan\ArtisanRequest;
 use App\Models\Account;
 use App\Models\Article;
+use App\Notifications\SendSlack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Notifications\Notifiable;
 
 class ArticleController extends Controller
 {
+    use Notifiable;
+
     public function articleListData (Article $article) {
         try {
             $articleData = $article->articleListData();
@@ -46,6 +51,12 @@ class ArticleController extends Controller
 
             //記事作成
             $createdData = $article->createArticleData($postData);
+
+            Log::info('記事作成成功'. $createdData);
+            //slack通知
+            $slack = $this->notify(new SendSlack());
+            Log::info('slack通知成功');
+
             DB::commit();
             Log::info('トランザクション成功');
             return '新規作成されました';
@@ -113,5 +124,10 @@ class ArticleController extends Controller
             Log::emergency($e->getMessage());
             return $e;
         }
+    }
+
+    public function routeNotificationForSlack($notification)
+    {
+        return config('app.slack_url');
     }
 }
