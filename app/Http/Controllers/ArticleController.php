@@ -90,4 +90,17 @@ class ArticleController extends Controller
             return $e;
         }
     }
+
+    //genre検索
+    public function articleGenre (Article $article, $genre) {
+        try {
+            $articleData = $article->articleGenre($genre);
+            return $articleData;
+
+        } catch (\Exception $e){
+            Log::emergency('URLパラメータ値 :' . $genre);
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
 }

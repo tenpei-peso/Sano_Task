@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+use function PHPUnit\Framework\isEmpty;
+
 class Article extends Model
 {
     use HasFactory, SoftDeletes;
@@ -73,6 +75,25 @@ class Article extends Model
             Log::emergency('記事作成失敗 :' . $articleId);
             Log::emergency($e->getMessage());
             Log::emergency('modelで失敗');
+            throw $e;
+        }
+    }
+
+    public function articleGenre ($genre) {
+        try {
+            $article = $this->where('genre', $genre)->get();
+
+            if($article->isEmpty()) {
+                return response()->json([
+                    'message' => '記事が存在しません',
+                ], 404);
+            }
+
+            return $article;
+
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            Log::emergency('取れてない');
             throw $e;
         }
     }
