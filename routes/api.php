@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\BandController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\GameController;
-
+use App\Http\Controllers\StaffController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,4 +60,6 @@ Route::post('/game_search_list', [GameController::class, 'searchGameData']);
 //<----------テスト2-------->
 
 //<----------沼田さん課題-------->
+Route::get('/band_list_with_staff', [BandController::class, 'bandWithStaff']);
+Route::get('/staff_list_with_band', [StaffController::class, 'staffWithBand']);
 
