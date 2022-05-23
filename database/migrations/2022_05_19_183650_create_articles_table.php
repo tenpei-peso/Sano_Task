@@ -13,8 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->string('gender')->nullable(true)->comment('性別');
+        Schema::create('articles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('account_id');
+            $table->longText('content');
+            $table->integer('study_time');
+            $table->string('genre');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn('gender');
-        });
+        Schema::dropIfExists('articles');
     }
 };
