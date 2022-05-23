@@ -97,4 +97,17 @@ class Article extends Model
             throw $e;
         }
     }
+
+    public function articleOrderStudy () {
+        try {
+            $orderData = $this->orderBy('study_time', 'desc')->get();
+            return $orderData;
+
+        } catch (\Exception $e){
+            Log::emergency('記事作成失敗 :' . $orderData);
+            Log::emergency($e->getMessage());
+            Log::emergency('modelで失敗');
+            throw $e;
+        }
+    }
 }

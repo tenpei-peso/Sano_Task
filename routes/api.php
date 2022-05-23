@@ -64,6 +64,7 @@ Route::get('/article_list', [ArticleController::class, 'articleListData']);
 Route::get('/account_list', [AccountController::class, 'accountListData']);
 
 Route::get('/article_list/{genre}', [ArticleController::class, 'articleGenre']);
+Route::get('/article_order_study', [ArticleController::class, 'articleOrderStudy']);
 
 Route::post('/create_article_data', [ArticleController::class, 'createArticleData']);
 Route::post('/update_article_data', [ArticleController::class, 'updateArticleData']);

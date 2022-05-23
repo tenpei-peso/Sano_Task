@@ -103,4 +103,15 @@ class ArticleController extends Controller
             return $e;
         }
     }
+
+    public function articleOrderStudy (Article $article) {
+        try {
+            $articleData = $article->articleOrderStudy();
+            return $articleData;
+
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            return $e;
+        }
+    }
 }
