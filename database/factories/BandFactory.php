@@ -20,6 +20,7 @@ class BandFactory extends Factory
             'name' => $this->faker->realText(10),
             'genre' => Arr::random($genre),
             'people_count' => rand(1, 6),
+            'introduction' => $this->faker->realText(20),
         ];
     }
 }
