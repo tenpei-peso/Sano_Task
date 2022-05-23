@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->string('gender')->nullable(true)->comment('性別');
+        Schema::create('band_staff', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('band_id');
+            $table->foreignId('staff_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn('gender');
-        });
+        Schema::dropIfExists('band_staff');
     }
 };

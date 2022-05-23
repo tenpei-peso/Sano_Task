@@ -57,3 +57,6 @@ Route::get('/game_list', [GameController::class, 'getGameListData']);
 
 Route::post('/game_search_list', [GameController::class, 'searchGameData']);
 //<----------テスト2-------->
+
+//<----------沼田さん課題-------->
+
