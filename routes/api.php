@@ -5,6 +5,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\ReserveController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,5 +70,6 @@ Route::post('/staff_delete', [StaffController::class, 'staffDelete']);
 
 Route::post('/band_create', [BandController::class, 'bandCreate']);
 
+Route::post('/reserve_search', [ReserveController::class, 'reserveSearch']);
 
 

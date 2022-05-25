@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             BandSeeder::class,
             StaffSeeder::class,
             Band_StaffSeeder::class,
+            ReserveSeeder::class,
         ]);
     }
 }
