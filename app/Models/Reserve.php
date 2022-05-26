@@ -39,4 +39,32 @@ class Reserve extends Model
             throw $e;
         }
     }
-}
+
+    //重複チェック
+    public function doubleCheck ($studio, $date, $registerStartTime, $registerFinishTime) {
+        try {
+            $checkData = $this->where('studio', $studio)
+                ->where('date', $date)->where('finish_time', '>', $registerStartTime)
+                ->where('start_time', '<', $registerFinishTime)->get();
+            return $checkData;
+
+        } catch (\Exception $e){
+
+            Log::emergency($e->getMessage());
+            Log::emergency('取れてない');
+            throw $e;
+        }
+    }
+
+    //予約作成
+    public function createReserve ($postData) {
+        try {
+            $reserveData = $this->create($postData);
+            return $reserveData;
+
+        } catch (\Exception $e){
+            Log::emergency($e->getMessage());
+            throw $e;
+        }   
+    }
+}   

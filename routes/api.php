@@ -72,4 +72,7 @@ Route::post('/band_create', [BandController::class, 'bandCreate']);
 
 Route::post('/reserve_search', [ReserveController::class, 'reserveSearch']);
 
+Route::post('/create_reserve', [ReserveController::class, 'createReserve']);
+
+
 
