@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
+    'slack_url' => env('SLACK_URL'),
     /*
     |--------------------------------------------------------------------------
     | Application Name

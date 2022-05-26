@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Reserve;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Notifications\Notifiable;    //追記
+use App\Notifications\SendSlack;    //追記
+use Illuminate\Notifications\Messages\SlackMessage;    //追記
 
 class ReserveController extends Controller
 {
+    use Notifiable;
+
     public function reserveSearch (Reserve $reserve, Request $request) {
         $date = $request->input('date');
         $studio = $request->input('studio');
@@ -46,6 +51,8 @@ class ReserveController extends Controller
 
             //予約作成
             $createReserve = $reserve->createReserve($postData);
+            //slack通知
+            $slack = $this->notify(new SendSlack($studio, $date, $registerStartTime, $registerFinishTime));
             Log::info('予約作成完了');
             return $createReserve;
 
@@ -53,5 +60,10 @@ class ReserveController extends Controller
             Log::emergency($e->getMessage());
             return $e;
         }
+    }
+
+    public function routeNotificationForSlack($notification)
+    {
+        return config('app.slack_url');
     }
 }
