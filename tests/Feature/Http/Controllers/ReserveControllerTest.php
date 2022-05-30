@@ -37,9 +37,7 @@ class ReserveControllerTest extends TestCase
             'start_time' => '10:00',
             'finish_time' => '16:00',
         ];
-        $doubleCheck = $this->postJson('api/create_reserve', $postData);
-        //status200
-        $doubleCheck->assertOk();
+        $doubleCheck = $this->postJson('api/create_reserve', $postData)->assertOk();
         //データの数が二つしかない
         $this->assertCount(2, Reserve::all());
         //postしたデータが存在しない
@@ -74,9 +72,7 @@ class ReserveControllerTest extends TestCase
             'start_time' => '13:00',
             'finish_time' => '14:00',
         ];
-        $doubleCheck = $this->postJson('api/create_reserve', $postData);
-        //status
-        $doubleCheck->assertStatus(201);
+        $doubleCheck = $this->postJson('api/create_reserve', $postData)->assertStatus(201);
         //データの数が三つある
         $this->assertCount(3, Reserve::all());
         //postしたデータが存在する
@@ -110,9 +106,7 @@ class ReserveControllerTest extends TestCase
             'start_time' => '09:00',
             'finish_time' => '19:00',
         ];
-        $doubleCheck = $this->postJson('api/create_reserve', $postData);
-        //status
-        $doubleCheck->assertStatus(201);
+        $doubleCheck = $this->postJson('api/create_reserve', $postData)->assertStatus(201);
         //データの数が三つある
         $this->assertCount(3, Reserve::all());
         //postしたデータが存在する

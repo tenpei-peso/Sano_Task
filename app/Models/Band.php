@@ -44,13 +44,21 @@ class Band extends Model
         }
     }
 
-    public function addMiddleTable ($bandId) {
+    public function addMiddleTable ($bandId, $staffId) {
         try {
+            //*修正 バンドに参加するメンバーが一人の時と二人以上の時で分ける
+            $staffCount = explode(',', $staffId);
             $bandData = $this->find($bandId);
-            //バンドの数取得
-            $bandCount = Band::count();
-            $bandSyncData = $bandData->staffs()->sync(rand(1, $bandCount));
-            return $bandSyncData;
+
+            if(count($staffCount) == 1) {
+                $bandSyncData = $bandData->staffs()->sync($staffId);
+                return $bandSyncData;
+            }
+
+            if(count($staffCount) >= 2) {
+                $bandSyncData = $bandData->staffs()->sync($staffCount);
+                return $bandSyncData;
+            }
 
         } catch (\Exception $e){
             Log::emergency($e->getMessage());
