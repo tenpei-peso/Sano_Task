@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('members', function (Blueprint $table) {
+        Schema::create('band_staff', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('名前');
-            $table->integer('age')->comment('年齢');
-            $table->string('area')->comment('エリア');
-            $table->boolean('leader')->default(false)->comment('リーダー');
-            $table->string('comment')->nullable(true)->comment('コメント');
+            $table->foreignId('band_id');
+            $table->foreignId('staff_id');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('members');
+        Schema::dropIfExists('band_staff');
     }
 };
