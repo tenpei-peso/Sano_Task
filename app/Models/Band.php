@@ -51,12 +51,12 @@ class Band extends Model
             $bandData = $this->find($bandId);
 
             if(count($staffCount) == 1) {
-                $bandSyncData = $bandData->staffs()->sync($staffId);
+                $bandSyncData = $bandData->staffs()->syncWithoutDetaching($staffId);
                 return $bandSyncData;
             }
 
             if(count($staffCount) >= 2) {
-                $bandSyncData = $bandData->staffs()->sync($staffCount);
+                $bandSyncData = $bandData->staffs()->syncWithoutDetaching($staffCount);
                 return $bandSyncData;
             }
 
